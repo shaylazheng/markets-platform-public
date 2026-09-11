@@ -1,8 +1,10 @@
 # Markets Platform — public demo
 
+**[Open the interactive mock website](https://shaylazheng.github.io/markets-platform-public/mocks/out/02-frost.html)**
+
 **[Download the interactive Frost Desk HTML](https://github.com/shaylazheng/markets-platform-public/raw/refs/heads/main/docs/mocks/out/02-frost.html)** · [All ten original designs](docs/mocks/README.md)
 
-[![Frost Desk mock preview — synthetic data](docs/images/frost-desk.png)](docs/mocks/out/02-frost.html)
+[![Credit & Rates — Frost Desk mock preview, synthetic data](docs/images/frost-desk.png)](docs/mocks/out/02-frost.html)
 
 A modular markets research dashboard with macro charts, credit and rates, a calendar, a newswire, a company relationship graph, company research views, and signal-monitoring screens.
 
