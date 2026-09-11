@@ -1,0 +1,90 @@
+/* @title: Bento Desk */
+/* @blurb: Lavender-grey ground with softly tinted tiles — each surface a bento tray, pill segment tabs, rounded and airy. */
+/* @favicon: 🍱 */
+/* @fonts: family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600 */
+:root {
+  --bg: #f0eff6; --bg-2: #e9e8f2; --panel: #ffffff; --panel-2: #f4f3fa;
+  --line: #d6d4e6; --line-soft: #e9e8f2;
+  --ink: #1f1d33; --ink-2: #57547a; --ink-3: #8e8bae;
+  --accent: #5b4bdb; --accent-ink: #ffffff;
+  --up: #1aa870; --down: #e4514f;
+  --cat-econ: #4f7ff0; --cat-fed: #f0834d; --cat-earnings: #1aa870; --cat-energy: #e0a800; --cat-market: #a04fe0;
+  --tint-mint: #e6f6ee; --tint-peach: #fdeee4; --tint-sky: #e7eefc; --tint-lilac: #efe9fb; --tint-lemon: #fbf6de;
+  --radius: 22px; --radius-sm: 12px; --gap: 14px; --shadow: 0 1px 2px rgba(31,29,51,0.04);
+  --font-ui: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #16151f; --bg-2: #1a1925; --panel: #201f2c; --panel-2: #2a293a; --line: #3b3a4f; --line-soft: #2c2b3c;
+  --ink: #ecebf5; --ink-2: #b4b2cc; --ink-3: #7c7a98; --accent: #9d8dff; --accent-ink: #12102a; --up: #4fd39c; --down: #ff7b79;
+  --cat-econ: #7ea1ff; --cat-fed: #ffa274; --cat-earnings: #4fd39c; --cat-energy: #ffd35c; --cat-market: #c38dff;
+  --tint-mint: #1b2a26; --tint-peach: #2d2320; --tint-sky: #1e2434; --tint-lilac: #262036; --tint-lemon: #2b2a1e; --shadow: none;
+} }
+:root[data-theme="dark"] {
+  --bg: #16151f; --bg-2: #1a1925; --panel: #201f2c; --panel-2: #2a293a; --line: #3b3a4f; --line-soft: #2c2b3c;
+  --ink: #ecebf5; --ink-2: #b4b2cc; --ink-3: #7c7a98; --accent: #9d8dff; --accent-ink: #12102a; --up: #4fd39c; --down: #ff7b79;
+  --cat-econ: #7ea1ff; --cat-fed: #ffa274; --cat-earnings: #4fd39c; --cat-energy: #ffd35c; --cat-market: #c38dff;
+  --tint-mint: #1b2a26; --tint-peach: #2d2320; --tint-sky: #1e2434; --tint-lilac: #262036; --tint-lemon: #2b2a1e; --shadow: none;
+}
+.nav { border-bottom: 0; background: var(--bg); min-height: 64px; padding: 0 24px; }
+.brand-name { font-weight: 800; }
+.brand-mark { background: var(--accent); color: var(--accent-ink); border-radius: 9px; width: 28px; height: 28px; }
+.group-label { display: none; }
+.groups { flex: 0 0 auto; margin: 0 auto; gap: 8px; }
+.group-links { padding: 4px; background: var(--panel); border-radius: 999px; box-shadow: var(--shadow); gap: 2px; }
+.navlink { border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 0.86rem; }
+.navlink.is-active { background: var(--accent); color: var(--accent-ink); }
+.navlink:hover:not(.is-active) { background: var(--panel-2); }
+.nav-tools { margin-left: auto; }
+.session, .ibtn, .acct { border-radius: 999px; background: var(--panel); border-color: transparent; box-shadow: var(--shadow); }
+.stage { padding: 10px 24px 40px; }
+.card { border: 0; box-shadow: var(--shadow); }
+.card-h { padding: 18px 22px 0; }
+.card-t { font-weight: 700; font-size: 0.86rem; }
+.card-b { padding: 12px 22px 22px; }
+/* tinted trays by role */
+.glance { background: var(--tint-lilac); }
+.featured { background: var(--tint-mint); }
+.insight { background: var(--tint-lemon); }
+#delivery, #filters, #progress { background: var(--tint-sky); }
+#daydetail, #glossary { background: var(--tint-peach); }
+.glance .card-t { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+.glance .card-sub { background: var(--panel); border-radius: 999px; padding: 3px 10px; }
+.read { font-size: 1rem; line-height: 1.6; }
+.tiles { gap: 8px; background: none; overflow: visible; }
+.tile { border-radius: 14px; background: var(--panel); }
+.tile.is-sel { box-shadow: inset 0 0 0 2px var(--accent); }
+.tile-n { font-weight: 800; letter-spacing: -0.03em; font-size: 1.3rem; }
+.tile-bar { display: block; height: 4px; }
+.news-mini-item { background: var(--panel); padding: 6px 10px; border-radius: 10px; }
+.mk-grid { grid-template-columns: 320px minmax(0, 1fr) 300px; }
+.big-val { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.04em; }
+.cm-val { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; }
+.tf { gap: 4px; }
+.tf-btn { border-radius: 999px; background: var(--panel-2); }
+.featured .tf-btn { background: var(--panel); }
+.tf-btn.is-active { background: var(--accent); color: var(--accent-ink); }
+.picker-btn, .filter, .btn, .chip, .insight-btn, .book-toggle, .seg, .seg button, .pill { border-radius: 999px; }
+.picker-btn { border-color: transparent; }
+.wl-row { border-bottom: 0; margin: 0 8px; border-radius: 10px; padding: 6px 10px; }
+.wl-row.is-sel { background: var(--tint-lilac); box-shadow: none; }
+.wl-head { padding-left: 18px; } .wl-group { padding-left: 18px; }
+.chart-stats { border: 0; padding: 6px 22px; gap: 8px; }
+.cs-cell { background: var(--panel-2); padding: 6px 12px; border-radius: 10px; }
+.flag { border-left: 0; background: var(--tint-lilac); padding: 16px 22px; border-radius: var(--radius); }
+.rtile { border: 0; border-radius: 16px; }
+.rtile:nth-child(3n+1) { background: var(--tint-sky); } .rtile:nth-child(3n+2) { background: var(--tint-mint); } .rtile:nth-child(3n) { background: var(--tint-peach); }
+.rtile-v { font-weight: 800; letter-spacing: -0.03em; }
+.cv-day.is-today { box-shadow: inset 0 0 0 2px var(--accent); border-radius: 12px; }
+.cv-day.is-sel { background: var(--tint-lilac); border-radius: 12px; }
+.det { border: 0; border-left: 4px solid; border-radius: 12px; background: var(--panel); }
+.news-item { margin: 8px 12px; border-radius: 16px; border: 0; background: var(--panel-2); padding: 14px 16px; }
+.news-item.is-book { background: var(--tint-mint); box-shadow: none; }
+.news-title { font-weight: 700; }
+.al-row.is-index { border-radius: 10px; }
+.al-box.is-open .card-h { border-bottom: 0; }
+.bubble { border-radius: 18px; }
+.bubble.me { background: var(--tint-lilac); border: 0; }
+.bubble.tutor { background: var(--panel-2); }
+.secb, .btn, .chip.is-on { background: var(--accent); color: var(--accent-ink); }

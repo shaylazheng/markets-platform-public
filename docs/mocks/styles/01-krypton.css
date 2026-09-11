@@ -1,0 +1,91 @@
+/* @title: Krypton Desk */
+/* @blurb: Modelled on kryptonairc-lc.github.io/KRYPTONV2 — near-black green ground, mint accent, serif display, left sidebar. */
+/* @favicon: 🟢 */
+/* @darkfirst: yes */
+/* @fonts: family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500 */
+:root {
+  --bg: #080b0a; --bg-2: #0b100e; --panel: #0f1512; --panel-2: #131b17;
+  --line: #22302a; --line-soft: #1a2521;
+  --ink: #e9efeb; --ink-2: #b7c3bd; --ink-3: #8a9792;
+  --accent: #3ddc97; --accent-ink: #04120c; --accent-dim: #1f7a56;
+  --up: #3ddc97; --down: #ff6b6b;
+  --cat-econ: #6ea8ff; --cat-fed: #ff8c5a; --cat-earnings: #3ddc97; --cat-energy: #f2c14e; --cat-market: #b58cff;
+  --radius: 12px; --radius-sm: 8px; --gap: 18px; --shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
+  --font-ui: "EB Garamond", Georgia, "Times New Roman", serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #f3f6f4; --bg-2: #eef2ef; --panel: #ffffff; --panel-2: #f2f6f3; --line: #cfdad3; --line-soft: #e2eae5;
+  --ink: #0f1a14; --ink-2: #3f5248; --ink-3: #74867c; --accent: #158f5e; --accent-ink: #ffffff; --up: #158f5e; --down: #c8402f;
+  --cat-econ: #2f6fd0; --cat-fed: #d9622a; --cat-earnings: #158f5e; --cat-energy: #b07d0a; --cat-market: #7c5cd6; --shadow: 0 1px 2px rgba(15,26,20,0.05);
+} }
+:root[data-theme="light"] {
+  --bg: #f3f6f4; --bg-2: #eef2ef; --panel: #ffffff; --panel-2: #f2f6f3; --line: #cfdad3; --line-soft: #e2eae5;
+  --ink: #0f1a14; --ink-2: #3f5248; --ink-3: #74867c; --accent: #158f5e; --accent-ink: #ffffff; --up: #158f5e; --down: #c8402f;
+  --cat-econ: #2f6fd0; --cat-fed: #d9622a; --cat-earnings: #158f5e; --cat-energy: #b07d0a; --cat-market: #7c5cd6; --shadow: 0 1px 2px rgba(15,26,20,0.05);
+}
+body { font-size: 15px; background: radial-gradient(1100px 420px at 50% -160px, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%), var(--bg); background-attachment: fixed; }
+
+/* sidebar shell */
+.app { display: grid; grid-template-columns: 224px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; min-height: 100vh; }
+.nav { grid-row: 1 / span 2; position: sticky; top: 0; height: 100vh; flex-direction: column; align-items: stretch; gap: 26px; padding: 22px 16px; border-bottom: 0; border-right: 1px solid var(--line-soft); background: color-mix(in srgb, var(--bg) 70%, var(--panel)); }
+.brand { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; letter-spacing: 0; padding: 0 8px; }
+.brand-name::after { content: " Desk"; font-style: italic; font-weight: 500; color: var(--accent); }
+.brand-mark { display: none; }
+.groups { flex-direction: column; align-items: stretch; gap: 20px; flex: 1; }
+.group { flex-direction: column; align-items: stretch; gap: 4px; }
+.group-label { font-family: var(--font-ui); font-size: 0.68rem; letter-spacing: 0.22em; padding: 0 12px 4px; }
+.group-links { flex-direction: column; gap: 1px; }
+.navlink { padding: 8px 12px; font-size: 0.98rem; border-radius: var(--radius-sm); }
+.navlink-dot { display: inline-block; background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.navlink.is-active { background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
+.navlink.is-active .navlink-dot { background: var(--accent); box-shadow: none; }
+.nav-tools { flex-direction: column; align-items: stretch; gap: 10px; border-top: 1px solid var(--line-soft); padding-top: 16px; }
+.session { justify-content: flex-start; background: transparent; padding: 4px 8px; font-size: 0.84rem; }
+.acct { justify-content: space-between; }
+.stage { padding: 34px 40px 48px; max-width: 1400px; }
+.foot { grid-column: 2; padding: 14px 40px; }
+
+/* section heads read as serif headlines, KRYPTON's "My desk" idiom */
+.card { border: 1px solid var(--line-soft); background: var(--panel); border-radius: var(--radius); box-shadow: none; }
+.card-h { padding: 14px 18px 0; }
+.card-t { font-family: var(--font-ui); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+.card-b { padding: 12px 18px 18px; }
+.glance { background: transparent; border: 0; }
+.glance .card-h { display: block; padding: 0; min-height: 0; }
+.glance .card-t { font-family: var(--font-display); font-size: 2.1rem; letter-spacing: -0.01em; text-transform: none; color: var(--ink); font-weight: 500; }
+.glance .card-t::before { content: "How is the tape today?"; display: block; }
+.glance .card-t { font-size: 0; }
+.glance .card-t::before { font-size: 2.1rem; line-height: 1.15; }
+.glance .card-sub { display: block; margin: 6px 0 0; font-size: 0.9rem; color: var(--ink-3); font-style: italic; }
+.glance .card-b { padding: 18px 0 0; }
+.read { font-size: 1.08rem; line-height: 1.6; color: var(--ink-2); max-width: 74ch; }
+.jump { border-bottom-color: var(--accent-dim); }
+.tiles { gap: 12px; background: none; border-radius: 0; overflow: visible; }
+.tile { border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 12px 14px; background: var(--panel); }
+.tile.is-sel { box-shadow: inset 0 0 0 1px var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
+.tile-l { letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.64rem; }
+.tile-n { font-family: var(--font-display); font-size: 1.55rem; font-weight: 600; }
+.tile-bar { display: block; }
+.news-mini { margin-top: 18px; }
+.news-mini .kicker { letter-spacing: 0.2em; }
+.mk-grid { grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) minmax(260px, 300px); }
+.big-val, .cm-val, .rtile-v, .det-big { font-family: var(--font-display); font-weight: 600; }
+.big-val { font-size: 2.3rem; } .cm-val { font-size: 2.2rem; }
+.wl-sym, .picker-sym, .picker-id, .al-sym, .tbl.earn .tick, .hold { font-family: var(--font-ui); font-weight: 600; letter-spacing: 0.02em; }
+.wl-head, .wl-group { letter-spacing: 0.16em; }
+.tf-btn.is-active { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
+.chip.is-on, .btn, .secb { background: var(--accent); color: var(--accent-ink); }
+.chip, .insight-btn, .session, .pill { border-radius: 999px; }
+.insight-btn.is-on, .book-toggle.is-on { color: var(--accent); }
+.insight.is-live { border-color: color-mix(in srgb, var(--accent) 35%, var(--line-soft)); }
+.insight-head { font-family: var(--font-display); font-size: 1.25rem; }
+.flag { background: transparent; border: 1px solid var(--line-soft); border-left: 3px solid var(--accent); font-size: 1.02rem; }
+.rtile { background: var(--panel); }
+.news-title { font-size: 1.12rem; font-weight: 500; }
+.news-summary { font-size: 0.95rem; }
+.det-date, .earn-day, .gloss-t { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; }
+.cv-day.is-today { box-shadow: inset 0 0 0 1px var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.bubble.tutor { background: color-mix(in srgb, var(--accent) 6%, var(--panel-2)); }
+@media (max-width: 900px) { .app { grid-template-columns: minmax(0, 1fr); } .nav { position: static; height: auto; grid-row: auto; flex-direction: column; } .stage { padding: 20px; } .foot { grid-column: 1; } }

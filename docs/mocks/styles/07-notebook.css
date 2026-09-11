@@ -1,0 +1,87 @@
+/* @title: Field Ledger */
+/* @blurb: An analyst's ruled notebook — ivory paper, slab headings, teal ink, index-tab navigation and margin notes. */
+/* @favicon: 📒 */
+/* @fonts: family=Bitter:wght@500;600;700&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500 */
+:root {
+  --bg: #f4f1e8; --bg-2: #ede9dd; --panel: #fbf9f3; --panel-2: #f1ede2;
+  --line: #c9c2ae; --line-soft: #e3ddcc;
+  --ink: #23231f; --ink-2: #57564d; --ink-3: #8a877a;
+  --accent: #157a6e; --accent-ink: #ffffff;
+  --up: #157a6e; --down: #b8412a;
+  --cat-econ: #2c63b8; --cat-fed: #c85a2a; --cat-earnings: #157a6e; --cat-energy: #b58a10; --cat-market: #7451b8;
+  --rule: rgba(21,122,110,0.14);
+  --radius: 6px; --radius-sm: 4px; --gap: 18px; --shadow: 0 1px 0 rgba(35,35,31,0.06);
+  --font-ui: "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Bitter", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1d1c18; --bg-2: #22211c; --panel: #262520; --panel-2: #2e2d27; --line: #4a4840; --line-soft: #35342d;
+  --ink: #ece8dc; --ink-2: #bdb8a8; --ink-3: #858173; --accent: #4fc4b4; --accent-ink: #0b1f1c; --up: #4fc4b4; --down: #ff8a6a;
+  --cat-econ: #7aa6ff; --cat-fed: #ff9a68; --cat-earnings: #4fc4b4; --cat-energy: #f2c75a; --cat-market: #b89dff; --rule: rgba(79,196,180,0.12); --shadow: none;
+} }
+:root[data-theme="dark"] {
+  --bg: #1d1c18; --bg-2: #22211c; --panel: #262520; --panel-2: #2e2d27; --line: #4a4840; --line-soft: #35342d;
+  --ink: #ece8dc; --ink-2: #bdb8a8; --ink-3: #858173; --accent: #4fc4b4; --accent-ink: #0b1f1c; --up: #4fc4b4; --down: #ff8a6a;
+  --cat-econ: #7aa6ff; --cat-fed: #ff9a68; --cat-earnings: #4fc4b4; --cat-energy: #f2c75a; --cat-market: #b89dff; --rule: rgba(79,196,180,0.12); --shadow: none;
+}
+body { font-size: 15px; background: repeating-linear-gradient(180deg, transparent 0 27px, var(--rule) 27px 28px), var(--bg); background-attachment: fixed; }
+.nav { background: var(--bg-2); border-bottom: 1px solid var(--line); min-height: 58px; padding: 0 28px; align-items: flex-end; }
+.brand { padding-bottom: 12px; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; }
+.brand-mark { display: none; }
+.brand-name::after { content: " — a field ledger"; font-family: var(--font-ui); font-weight: 400; font-style: italic; color: var(--ink-3); font-size: 0.9rem; }
+.groups { align-items: flex-end; gap: 14px; }
+.group { align-items: flex-end; gap: 6px; }
+.group-label { padding-bottom: 12px; font-family: var(--font-display); text-transform: none; letter-spacing: 0; font-size: 0.8rem; color: var(--ink-3); }
+.group-links { gap: 3px; }
+/* index tabs */
+.navlink { border: 1px solid var(--line); border-bottom: 0; border-radius: 6px 6px 0 0; background: var(--bg-2); padding: 8px 14px 9px; margin-bottom: -1px; color: var(--ink-2); }
+.navlink:hover { background: var(--panel-2); }
+.navlink.is-active { background: var(--bg); color: var(--ink); font-weight: 700; padding-bottom: 12px; border-color: var(--line); box-shadow: 0 1px 0 var(--bg); }
+.nav-tools { padding-bottom: 12px; }
+.session { background: transparent; border: 1px solid var(--line); font-style: italic; }
+.ibtn, .acct { background: transparent; }
+.stage { padding: 28px 28px 60px; max-width: 1500px; }
+.card { background: var(--panel); border: 1px solid var(--line-soft); box-shadow: var(--shadow); }
+.card-h { padding: 14px 20px 0; }
+.card-t { font-family: var(--font-display); font-size: 1.02rem; font-weight: 600; }
+.card-b { padding: 10px 20px 20px; }
+.glance { background: transparent; border: 0; box-shadow: none; }
+.glance .card-h { padding: 0; }
+.glance .card-t { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.01em; }
+.glance .card-sub { font-style: italic; }
+.glance .card-b { padding: 14px 0 0; }
+.read { font-size: 1.1rem; line-height: 1.7; color: var(--ink); max-width: 72ch; }
+.jump { border-bottom: 1.5px solid var(--accent); color: var(--accent); }
+.tiles { gap: 10px; background: none; overflow: visible; }
+.tile { border: 1px solid var(--line-soft); background: var(--panel); border-radius: 4px; }
+.tile.is-sel { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
+.tile-l { font-style: italic; font-size: 0.78rem; }
+.tile-n { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; }
+.tile-bar { display: block; }
+.mk-grid { grid-template-columns: 330px minmax(0, 1fr) 300px; }
+.big-val, .cm-val, .rtile-v, .det-big, .insight-head, .det-date, .earn-day, .gloss-t, .news-title { font-family: var(--font-display); }
+.big-val { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; }
+.cm-val { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.01em; }
+.wl-group { font-family: var(--font-display); text-transform: none; letter-spacing: 0; font-size: 0.8rem; color: var(--ink-2); }
+.wl-row.is-sel { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.tf-btn.is-active { background: var(--accent); color: var(--accent-ink); }
+.plot-area { fill: color-mix(in srgb, var(--accent) 10%, transparent); }
+.plot-grid line { stroke: var(--line-soft); stroke-dasharray: 1 4; }
+.flag { background: transparent; border: 0; border-left: 3px solid var(--accent); border-radius: 0; font-size: 1.08rem; line-height: 1.65; padding: 4px 18px; font-style: italic; }
+.flag strong, .flag b { font-style: normal; }
+.rtile { background: var(--panel); border: 1px solid var(--line-soft); }
+.rtile-v { font-weight: 700; }
+.rtile-s { font-style: italic; }
+.tbl th { font-family: var(--font-display); text-transform: none; letter-spacing: 0; font-size: 0.8rem; }
+p.foot, .note, .asof, .det-note { font-style: italic; }
+.cv-day.is-today { box-shadow: inset 0 0 0 1.5px var(--accent); }
+.cv-num { font-family: var(--font-display); }
+.det { background: transparent; border-radius: 0; border-color: var(--line-soft); }
+.news-title { font-size: 1.15rem; font-weight: 600; line-height: 1.35; }
+.news-summary { font-size: 0.95rem; }
+.src { font-family: var(--font-display); letter-spacing: 0; text-transform: none; font-size: 0.72rem; }
+.chip.is-on, .btn, .secb { background: var(--accent); color: var(--accent-ink); }
+.bubble.tutor { background: transparent; border: 1px solid var(--line-soft); }
+.bubble.me { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.gloss-d { font-size: 0.9rem; }

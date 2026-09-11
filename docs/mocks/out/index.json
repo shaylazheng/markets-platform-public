@@ -1,0 +1,62 @@
+[
+  {
+    "name": "01-krypton",
+    "title": "Krypton Desk",
+    "blurb": "Modelled on kryptonairc-lc.github.io/KRYPTONV2 — near-black green ground, mint accent, serif display, left sidebar.",
+    "favicon": "🟢"
+  },
+  {
+    "name": "02-frost",
+    "title": "Frost Desk",
+    "blurb": "Soft frosted surfaces on a cool blue-grey ground, cobalt accent, big readouts and floating controls.",
+    "favicon": "❄️"
+  },
+  {
+    "name": "03-amber",
+    "title": "Amber Tape",
+    "blurb": "A softened terminal — charcoal ground, amber accent, monospace throughout, full-width rows instead of cards.",
+    "favicon": "🟠"
+  },
+  {
+    "name": "04-swiss",
+    "title": "Swiss Tape",
+    "blurb": "International-style grid — white ground, black type, one cobalt, rules instead of boxes, oversized figures.",
+    "favicon": "⬛"
+  },
+  {
+    "name": "05-nordic",
+    "title": "Nordic Dusk",
+    "blurb": "Deep navy ground, ice-cyan accent, an icon rail on the left, hairlines and generous gutters.",
+    "favicon": "🌌"
+  },
+  {
+    "name": "06-bento",
+    "title": "Bento Desk",
+    "blurb": "Lavender-grey ground with softly tinted tiles — each surface a bento tray, pill segment tabs, rounded and airy.",
+    "favicon": "🍱"
+  },
+  {
+    "name": "07-notebook",
+    "title": "Field Ledger",
+    "blurb": "An analyst's ruled notebook — ivory paper, slab headings, teal ink, index-tab navigation and margin notes.",
+    "favicon": "📒"
+  },
+  {
+    "name": "08-oled",
+    "title": "Violet Signal",
+    "blurb": "True-black OLED ground with a violet glow accent, the chart as the hero, centered nav, luminous lines.",
+    "favicon": "🟣"
+  },
+  {
+    "name": "09-dataink",
+    "title": "Morning Sheet",
+    "blurb": "Tufte-quiet — white paper, one cobalt, serif prose with sans data; reads like the morning sheet with a sticky contents rail.",
+    "favicon": "📄"
+  },
+  {
+    "name": "10-brass",
+    "title": "Brass & Espresso",
+    "blurb": "Warm dark espresso ground with a brass accent, Lora headings over Karla, cards lit from the top edge.",
+    "favicon": "🥃"
+  }
+]

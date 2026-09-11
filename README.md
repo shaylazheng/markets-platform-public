@@ -1,6 +1,16 @@
 # Markets Platform — public demo
 
+**[Download the interactive Frost Desk HTML](https://github.com/shaylazheng/markets-platform-public/raw/refs/heads/main/docs/mocks/out/02-frost.html)** · [All ten original designs](docs/mocks/README.md)
+
+[![Frost Desk mock preview — synthetic data](docs/images/frost-desk.png)](docs/mocks/out/02-frost.html)
+
 A modular markets research dashboard with macro charts, credit and rates, a calendar, a newswire, a company relationship graph, company research views, and signal-monitoring screens.
+
+## Interactive mock dashboard
+
+Save the HTML and open it in your browser, or open `docs/mocks/out/02-frost.html` after cloning. This is the original Frost Desk mock, the design identified as applied to the market app. Its charts, watchlist filter, timeframes, calendar, news, alerts, and learning screens run entirely in the browser using illustrative data. No server is needed. The mock has no Report section.
+
+The runnable React dashboard below is a separate, fuller demonstration. Rebuild the standalone mock files with `node docs/mocks/build.mjs`.
 
 ## Run locally
 
