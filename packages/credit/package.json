@@ -1,0 +1,14 @@
+{
+  "name": "@markets/credit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The curve against its own history, HY/IG, conditions.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/shell": "*"
+  }
+}

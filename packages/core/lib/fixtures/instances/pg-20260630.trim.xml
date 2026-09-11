@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!-- Trimmed from the REAL extracted XBRL instance of PG 10-K accession 0000080424-26-000103
+     (pg-20260630_htm.xml). Contexts and facts are verbatim; only unrelated contexts/facts were dropped.
+     PG rides srt:ConsolidationItemsAxis=OperatingSegmentsMember on every segment row and reconciles
+     through us-gaap:CorporateNonSegmentMember - the second real shape the reader must handle. -->
+<xbrl>
+<context id="c-1">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-132">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-148">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:BeautySegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-149">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:GroomingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-150">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:HealthCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-151">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:FabricHomeCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-152">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:BabyFeminineFamilyCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-153">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:CorporateNonSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-07-01</startDate>
+            <endDate>2026-06-30</endDate>
+        </period>
+    </context>
+<context id="c-154">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:BeautySegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-07-01</startDate>
+            <endDate>2025-06-30</endDate>
+        </period>
+    </context>
+<context id="c-155">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:GroomingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-07-01</startDate>
+            <endDate>2025-06-30</endDate>
+        </period>
+    </context>
+<context id="c-156">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:HealthCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-07-01</startDate>
+            <endDate>2025-06-30</endDate>
+        </period>
+    </context>
+<context id="c-157">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:FabricHomeCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-07-01</startDate>
+            <endDate>2025-06-30</endDate>
+        </period>
+    </context>
+<context id="c-158">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:BabyFeminineFamilyCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-07-01</startDate>
+            <endDate>2025-06-30</endDate>
+        </period>
+    </context>
+<context id="c-159">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:CorporateNonSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-07-01</startDate>
+            <endDate>2025-06-30</endDate>
+        </period>
+    </context>
+<context id="c-160">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:BeautySegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-07-01</startDate>
+            <endDate>2024-06-30</endDate>
+        </period>
+    </context>
+<context id="c-161">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:GroomingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-07-01</startDate>
+            <endDate>2024-06-30</endDate>
+        </period>
+    </context>
+<context id="c-162">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:HealthCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-07-01</startDate>
+            <endDate>2024-06-30</endDate>
+        </period>
+    </context>
+<context id="c-163">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:FabricHomeCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-07-01</startDate>
+            <endDate>2024-06-30</endDate>
+        </period>
+    </context>
+<context id="c-164">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">pg:BabyFeminineFamilyCareSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-07-01</startDate>
+            <endDate>2024-06-30</endDate>
+        </period>
+    </context>
+<context id="c-165">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:CorporateNonSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-07-01</startDate>
+            <endDate>2024-06-30</endDate>
+        </period>
+    </context>
+<context id="c-22">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+        </entity>
+        <period>
+            <startDate>2024-07-01</startDate>
+            <endDate>2025-06-30</endDate>
+        </period>
+    </context>
+<context id="c-23">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000080424</identifier>
+        </entity>
+        <period>
+            <startDate>2023-07-01</startDate>
+            <endDate>2024-06-30</endDate>
+        </period>
+    </context>
+<us-gaap:NetIncomeLoss contextRef="c-1" decimals="-6" id="f-1156" unitRef="usd">16046000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss contextRef="c-1" decimals="-6" id="f-140" unitRef="usd">16046000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss contextRef="c-22" decimals="-6" id="f-1157" unitRef="usd">15974000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss contextRef="c-22" decimals="-6" id="f-141" unitRef="usd">15974000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss contextRef="c-23" decimals="-6" id="f-1158" unitRef="usd">14879000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss contextRef="c-23" decimals="-6" id="f-142" unitRef="usd">14879000000</us-gaap:NetIncomeLoss>
+<us-gaap:OperatingIncomeLoss contextRef="c-1" decimals="-6" id="f-116" unitRef="usd">19748000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss contextRef="c-22" decimals="-6" id="f-117" unitRef="usd">20451000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss contextRef="c-23" decimals="-6" id="f-118" unitRef="usd">18545000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-134" unitRef="usd">16144000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-149" unitRef="usd">16144000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-352" unitRef="usd">16144000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-393" unitRef="usd">16144000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-610" unitRef="usd">16144000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-148" decimals="-6" id="f-604" unitRef="usd">2672000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-149" decimals="-6" id="f-605" unitRef="usd">1529000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-150" decimals="-6" id="f-606" unitRef="usd">2404000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-151" decimals="-6" id="f-607" unitRef="usd">5632000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-152" decimals="-6" id="f-608" unitRef="usd">3930000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-153" decimals="-6" id="f-609" unitRef="usd">-23000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-154" decimals="-6" id="f-661" unitRef="usd">2715000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-155" decimals="-6" id="f-662" unitRef="usd">1577000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-156" decimals="-6" id="f-663" unitRef="usd">2440000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-157" decimals="-6" id="f-664" unitRef="usd">5848000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-158" decimals="-6" id="f-665" unitRef="usd">4013000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-159" decimals="-6" id="f-666" unitRef="usd">-527000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-160" decimals="-6" id="f-718" unitRef="usd">2963000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-161" decimals="-6" id="f-719" unitRef="usd">1477000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-162" decimals="-6" id="f-720" unitRef="usd">2258000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-163" decimals="-6" id="f-721" unitRef="usd">5687000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-164" decimals="-6" id="f-722" unitRef="usd">4020000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-165" decimals="-6" id="f-723" unitRef="usd">-1430000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-22" decimals="-6" id="f-135" unitRef="usd">16065000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-22" decimals="-6" id="f-150" unitRef="usd">16065000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-22" decimals="-6" id="f-313" unitRef="usd">16065000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-22" decimals="-6" id="f-394" unitRef="usd">16065000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-22" decimals="-6" id="f-667" unitRef="usd">16065000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-23" decimals="-6" id="f-136" unitRef="usd">14974000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-23" decimals="-6" id="f-151" unitRef="usd">14974000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-23" decimals="-6" id="f-274" unitRef="usd">14974000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-23" decimals="-6" id="f-395" unitRef="usd">14974000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss contextRef="c-23" decimals="-6" id="f-724" unitRef="usd">14974000000</us-gaap:ProfitLoss>
+<us-gaap:Revenues contextRef="c-1" decimals="-6" id="f-104" unitRef="usd">87032000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-1" decimals="-6" id="f-575" unitRef="usd">87032000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-132" decimals="-8" id="f-552" unitRef="usd">41700000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-148" decimals="-6" id="f-569" unitRef="usd">16023000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-149" decimals="-6" id="f-570" unitRef="usd">6918000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-150" decimals="-6" id="f-571" unitRef="usd">12456000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-151" decimals="-6" id="f-572" unitRef="usd">30314000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-152" decimals="-6" id="f-573" unitRef="usd">20401000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-153" decimals="-6" id="f-574" unitRef="usd">919000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-154" decimals="-6" id="f-626" unitRef="usd">14964000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-155" decimals="-6" id="f-627" unitRef="usd">6662000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-156" decimals="-6" id="f-628" unitRef="usd">11998000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-157" decimals="-6" id="f-629" unitRef="usd">29617000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-158" decimals="-6" id="f-630" unitRef="usd">20248000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-159" decimals="-6" id="f-631" unitRef="usd">794000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-160" decimals="-6" id="f-683" unitRef="usd">15220000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-161" decimals="-6" id="f-684" unitRef="usd">6654000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-162" decimals="-6" id="f-685" unitRef="usd">11793000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-163" decimals="-6" id="f-686" unitRef="usd">29495000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-164" decimals="-6" id="f-687" unitRef="usd">20277000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-165" decimals="-6" id="f-688" unitRef="usd">601000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-22" decimals="-6" id="f-105" unitRef="usd">84284000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-22" decimals="-6" id="f-632" unitRef="usd">84284000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-23" decimals="-6" id="f-106" unitRef="usd">84039000000</us-gaap:Revenues>
+<us-gaap:Revenues contextRef="c-23" decimals="-6" id="f-689" unitRef="usd">84039000000</us-gaap:Revenues>
+</xbrl>

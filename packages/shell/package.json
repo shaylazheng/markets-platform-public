@@ -1,0 +1,14 @@
+{
+  "name": "@markets/shell",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared chrome: store, routing, API helpers, panels, formatters. Knows nothing about which sections exist \u2014 the registry is passed in. Depends on @markets/calendar for one thing only: the top bar's market-open indicator reads the release calendar.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "@markets/calendar": "*"
+  },
+  "scripts": {}
+}

@@ -1,0 +1,254 @@
+/* Management surface.
+ *
+ * Declares NO :root block and redefines NO tokens — bloom.css stays the
+ * authority on the palette, the same contract insider.css and competitors.css
+ * honour. Every colour here is a var().
+ *
+ * The layout is Valuation's Console, which is the chosen design for this group:
+ * a sticky rail carrying the input and the provenance, results to the right.
+ */
+.mg-surface {
+  height: 100%; min-height: 0;
+  display: flex; flex-direction: row; align-items: flex-start;
+  gap: var(--gutter); padding: var(--gutter);
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.mg-surface::-webkit-scrollbar { width: 9px; }
+.mg-surface::-webkit-scrollbar-track { background: transparent; }
+.mg-surface::-webkit-scrollbar-thumb {
+  background: var(--hairline); border-radius: 999px; border: 2px solid var(--bg);
+}
+
+.mg-rail {
+  flex: 0 0 320px; align-self: flex-start;
+  position: sticky; top: 0; z-index: 5;
+  max-height: calc(100vh - var(--topbar-h) - var(--gutter) * 2);
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: var(--gutter);
+}
+.mg-rail > .pnl { flex: 0 0 auto; }
+
+.mg-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: var(--gutter); }
+
+/* The rail's own container. Its CONTENTS are the shared .co-rail from the
+   shell — ticker box, identity, facts, coverage note — so what used to be
+   ninety lines of bespoke form and stat styling here is now four surfaces'
+   worth of one component. */
+
+/* ---- rosters ------------------------------------------------------------ */
+
+.mg-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.79rem; font-variant-numeric: var(--nums);
+}
+.mg-table thead th {
+  position: sticky; top: 0; z-index: 1; background: var(--panel-head);
+  text-align: right; padding: 6px 10px;
+  font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--ink-fainter);
+  border-bottom: 1px solid var(--hairline);
+}
+.mg-table td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--hairline-soft); }
+.mg-table tbody tr:hover td { background: var(--panel-2); }
+.mg-table tr:last-child td { border-bottom: none; }
+.mg-l { text-align: left !important; }
+.mg-num { font-variant-numeric: var(--nums); }
+.mg-dim { color: var(--ink-fainter); }
+
+/* The shell's src affordance, spaced for a table cell — the same 6px the
+   competitors matrix gives its row-header buttons. */
+.mg-table .si-srcbtn { margin-left: 6px; }
+
+.mg-name { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.mg-title { color: var(--ink-soft); }
+.mg-head-meta { font-size: 10px; color: var(--ink-fainter); margin-left: auto; }
+
+/* A lapsed row is history, not an error — recessive, never --down. Someone who
+   stopped filing has probably left, and "probably" is not a failure state. */
+.mg-table tr.is-lapsed td { opacity: 0.6; }
+
+/* The 10%-owner mark. Its own name: an earlier pass called it .mg-flag, which
+   is also the standing note at the top of the surface — a block with a 2px
+   accent left border — so every badge inherited a block layout and a border it
+   had no business having. */
+.mg-badge {
+  display: inline-block; margin-left: 6px; padding: 0 5px;
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.04em;
+  color: var(--ink-faint); background: var(--panel-2);
+  border: 1px solid var(--hairline); border-radius: 3px;
+  line-height: 1.6;
+}
+
+.mg-status {
+  font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 1px 6px; border-radius: 3px; white-space: nowrap;
+}
+.mg-status.is-current { color: var(--up); background: color-mix(in oklab, var(--up) 12%, transparent); }
+.mg-status.is-lapsed { color: var(--ink-faint); background: var(--panel-2); cursor: help; }
+
+/* ---- tenure ------------------------------------------------------------- */
+
+.mg-tenure { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.25; }
+.mg-tenure b { font-weight: 600; font-variant-numeric: var(--nums); }
+.mg-tenure-since { font-size: 0.6rem; color: var(--ink-fainter); white-space: nowrap; }
+/* A censored start is a different KIND of number, not a worse one — hatched
+   the same way competitors.css marks a non-applicable cell, because both say
+   "the model declines" rather than "the value is bad". */
+.mg-tenure.is-censored { cursor: help; }
+.mg-tenure.is-censored b { color: var(--ink-faint); font-style: italic; }
+
+.mg-item {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em;
+  padding: 1px 6px; border-radius: 3px; margin-right: 5px;
+  color: var(--accent); background: color-mix(in oklab, var(--accent) 12%, transparent);
+}
+.mg-item.is-alt { color: var(--ink-faint); background: var(--panel-2); }
+
+.mg-table a { color: var(--ink-soft); text-decoration: none; font-family: var(--font-code); font-size: 0.72rem; }
+.mg-table a:hover { color: var(--accent); }
+
+.mg-foot {
+  margin: 0; padding: 9px 12px;
+  font-size: 0.74rem; line-height: 1.65; color: var(--ink-faint);
+}
+.mg-foot + .mg-foot { padding-top: 0; }
+.mg-foot b { color: var(--ink-soft); font-weight: 600; }
+.mg-foot code { font-family: var(--font-code); font-size: 0.72rem; color: var(--ink); }
+.mg-foot a { color: var(--accent); }
+
+.mg-empty {
+  padding: 14px 16px; color: var(--ink-faint); font-size: 0.8rem; line-height: 1.55;
+}
+.mg-empty p { margin: 0 0 8px; }
+
+@media (max-width: 1000px) {
+  .mg-surface { height: auto; overflow: visible; flex-direction: column; }
+  .mg-rail {
+    flex: 0 0 auto; width: 100%; align-self: stretch;
+    top: var(--topbar-h); max-height: none; overflow: visible;
+  }
+}
+
+/* ---- the expanded officer row ------------------------------------------- */
+/* Officers open; directors do not. Every colour is a var() — this file still
+   declares no palette of its own. */
+
+.mg-disclose {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font: inherit; font-weight: 600; color: var(--ink); text-align: left;
+}
+.mg-disclose:hover { color: var(--accent); }
+.mg-disclose:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.mg-caret {
+  display: inline-block; width: 0.7em; flex: 0 0 auto;
+  color: var(--ink-fainter); font-size: 0.85em;
+}
+.mg-table tr.is-open .mg-caret { color: var(--accent); }
+.mg-table tr.is-open td { background: var(--panel-2); }
+
+.mg-detail-row td { padding: 0 !important; text-align: left !important; background: var(--panel-2); }
+.mg-detail {
+  padding: 12px 14px 14px;
+  border-left: 2px solid var(--accent);
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+/* ---- share movement ------------------------------------------------------ */
+
+.mg-move { display: flex; flex-direction: column; gap: 10px; }
+.mg-move-grid {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+.mg-move-cell {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 8px 10px; background: var(--panel); border-radius: var(--radius);
+  border: 1px solid var(--hairline-soft);
+}
+.mg-move-k {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--ink-fainter);
+}
+.mg-move-cell b { font-size: 1.05rem; font-variant-numeric: var(--nums); color: var(--ink); }
+/* Open-market direction is the one thing here worth a colour: it is the only
+   figure on the row that reflects a decision rather than a payroll mechanic. */
+.mg-move-cell b.is-buy { color: var(--up); }
+.mg-move-cell b.is-sell { color: var(--down); }
+.mg-move-sub { font-size: 10px; color: var(--ink-faint); }
+
+.mg-trades { font-size: 0.74rem; }
+.mg-trades thead th { background: var(--panel); }
+/* Compensation mechanics recede; a decision does not. Same rule as .is-lapsed —
+   recessive, never coloured as bad. */
+.mg-trades tr.is-comp td, .mg-trades tr.is-other td { opacity: 0.62; }
+
+.mg-code {
+  display: inline-block; min-width: 1.2em; margin-right: 6px; padding: 0 4px;
+  font-size: 9px; font-weight: 700; text-align: center;
+  border-radius: 3px; border: 1px solid var(--hairline);
+  color: var(--ink-faint); background: var(--panel);
+}
+.mg-code.is-openMarket { color: var(--accent); border-color: var(--accent); }
+
+.mg-link { color: var(--accent); white-space: nowrap; }
+
+/* ---- career history and press -------------------------------------------- */
+
+.mg-bg { display: flex; flex-direction: column; gap: 14px; }
+.mg-bg-h {
+  margin: 0 0 6px; font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-fainter);
+}
+.mg-roles { margin: 0 0 8px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.mg-roles li { font-size: 0.79rem; color: var(--ink-soft); }
+.mg-roles b { color: var(--ink); font-weight: 600; }
+.mg-role-t { color: var(--ink-soft); }
+.mg-role-p { color: var(--ink-fainter); font-variant-numeric: var(--nums); }
+
+/* The quote carries the evidence, so it is styled as a quotation and not as
+   body copy — the reader should see at a glance that these are the filing's
+   words rather than the page's. */
+.mg-quote {
+  margin: 0; padding: 8px 12px;
+  border-left: 2px solid var(--hairline);
+  background: var(--panel);
+  font-size: 0.79rem; line-height: 1.65; color: var(--ink-soft);
+}
+
+.mg-stories { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.mg-stories li { display: flex; flex-direction: column; gap: 1px; }
+.mg-stories a { font-size: 0.79rem; color: var(--ink); line-height: 1.45; }
+.mg-stories a:hover { color: var(--accent); }
+.mg-story-m { font-size: 10px; color: var(--ink-fainter); }
+
+/* ---- the 60-day column -------------------------------------------------- */
+
+/* Two measures in one cell, stacked: net open-market dollars over the change in
+   directly-held shares. They are stacked rather than given two columns because
+   they answer one question — "what did this person do lately" — and because a
+   roster is already five columns wide before it earns a sixth. */
+.mg-w { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.25; }
+.mg-w-val { font-weight: 600; font-variant-numeric: var(--nums); white-space: nowrap; }
+.mg-w-pct { font-size: 0.62rem; font-variant-numeric: var(--nums); white-space: nowrap; }
+/* Direction is the claim here — bought or sold, grew or shrank — so it earns
+   the reserved pair. The sign carries it too, for greyscale and for a
+   colourblind reader. */
+.mg-w-val.is-up, .mg-w-pct.is-up { color: var(--up); }
+.mg-w-val.is-down, .mg-w-pct.is-down { color: var(--down); }
+.mg-w-val.is-flat, .mg-w-pct.is-flat { color: var(--ink-faint); }
+.mg-w-pct.is-up, .mg-w-pct.is-down { opacity: 0.85; }
+/* No filing in the window is not zero activity — it is no record, and it reads
+   as an absence rather than as a number. */
+.mg-w-none { color: var(--ink-fainter); cursor: help; }
+.mg-w-partial {
+  font-size: 0.6rem; color: var(--ink-fainter); cursor: help; margin-left: 3px;
+}
+/* The dollars moved somewhere the percentage cannot see. Not an error state —
+   a trust is a legitimate way to hold shares — so it is a quiet marker, not a
+   warning colour. */
+.mg-w-ind {
+  font-size: 0.55rem; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--ink-fainter); cursor: help; margin-left: 4px;
+  border-bottom: 1px dotted var(--ink-fainter);
+}

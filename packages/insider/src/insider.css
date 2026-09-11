@@ -1,0 +1,419 @@
+/* ------------------------------------------------------------------ */
+/*  Insider surface                                                     */
+/*                                                                      */
+/*  Built on the semantic tokens in base.css rather than its own palette */
+/*  so it reads as the same product as Markets and Calendar. The old     */
+/*  standalone screener shipped its own colours; those are gone.         */
+/* ------------------------------------------------------------------ */
+
+.insider-surface {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: var(--gutter);
+  gap: var(--gutter);
+}
+
+/* --- filter bar --- */
+
+.ins-bar {
+  flex: none;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  background: var(--panel);
+  border-radius: var(--radius);
+}
+
+.ins-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ins-field.ins-grow { flex: 1 1 220px; }
+
+.ins-field label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+}
+
+.ins-field input,
+.ins-field select {
+  font: inherit;
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--panel-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 5px 7px;
+  min-width: 0;
+}
+.ins-field input:focus-visible,
+.ins-field select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+/* --- toggles --- */
+
+.ins-toggles { flex: none; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+.ins-chip {
+  font: inherit;
+  font-size: 11px;
+  color: var(--ink-soft);
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.ins-chip:hover { color: var(--ink); border-color: var(--hairline); }
+.ins-chip.is-on {
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.ins-reset { margin-left: auto; }
+
+/* --- the filter panel -------------------------------------------------
+   There were five interchangeable layouts here (sentence, palette, builder,
+   deck, dials) behind a Layout picker, plus four geometric arrangements of the
+   grouped form. All nine are gone; the grouped form is the surface. What is
+   left below is that one layout, now living in the sidebar.
+
+   One surface, not three. Previously a row of controls, a row of chips and a
+   separate grouped panel each held part of the vocabulary, so transaction type
+   and sort order sat above the categories that were supposed to organise them.
+   Everything now lives in its category; only search and reset, needed whatever
+   you are filtering on, stay outside. */
+
+.ins-panel {
+  flex: none;
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 8px 12px 4px;
+}
+
+.ins-panel-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.ins-searchbox {
+  flex: 1 1 auto;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ink);
+  background: var(--panel-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  min-width: 0;
+}
+.ins-searchbox:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+.ins-panel-top .ins-reset { margin-left: 0; flex: none; }
+
+/* Categories flow into however many columns the width allows, so a short
+   category does not reserve a full row to itself. */
+.ins-cats {
+  columns: 3 260px;
+  column-gap: 22px;
+}
+.ins-cats > details {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.ins-field-wide { flex: 1 1 100%; }
+
+/* Labelled, because the unlabelled version was missed entirely. Still one
+   control rather than a row of buttons. */
+
+/* ===========================================================================
+   Five arrangements of the one panel. Every category and every field is
+   present in all five -- nothing moves outside the panel, nothing becomes
+   unreachable. What changes is how the eight categories are navigated.
+   ======================================================================== */
+
+/* --- filter categories, each independently collapsible --- */
+
+.ins-fgroup {
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.ins-fgroup:last-of-type { border-bottom: 0; }
+
+.ins-fgroup > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 7px 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.ins-fgroup > summary::-webkit-details-marker { display: none; }
+.ins-fgroup > summary::before {
+  content: '▸';
+  font-size: 9px;
+  color: var(--ink-fainter);
+}
+.ins-fgroup[open] > summary::before { content: '▾'; }
+.ins-fgroup > summary:hover { color: var(--ink); }
+
+/* A folded group must never hide a filter that is changing the results, so it
+   carries the count of active fields inside it. */
+.ins-fgroup-count {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 999px;
+  padding: 0 5px;
+  font-size: 9px;
+  line-height: 14px;
+  min-width: 14px;
+  text-align: center;
+  letter-spacing: 0;
+}
+.ins-fgroup > .ins-advgrid,
+.ins-fgroup > .ins-adv-roles { padding-bottom: 9px; }
+
+/* --- table --- */
+
+.ins-tablewrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: var(--panel);
+  border-radius: var(--radius);
+}
+
+.ins-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: var(--nums);
+  font-feature-settings: "tnum" 1;
+}
+
+.ins-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel-head);
+  color: var(--ink-faint);
+  font-weight: 500;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
+  padding: 7px 8px;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.ins-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--hairline-soft);
+  white-space: nowrap;
+}
+.ins-table tbody tr:hover td { background: var(--panel-2); }
+
+.ins-r { text-align: right; }
+
+.ins-age { color: var(--ink-faint); }
+.ins-tk { font-family: var(--font-code); font-weight: 600; }
+.ins-co, .ins-who {
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ins-co { color: var(--ink-soft); }
+.ins-role { color: var(--ink-faint); font-size: 11px; }
+.ins-val { font-weight: 600; }
+
+/* A joint Form 4 names several related parties on the same trades. The count is
+   surfaced because one filing by four affiliates is one decision, not four. */
+.ins-joint {
+  margin-left: 4px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--ink-faint);
+  font-size: 10px;
+}
+
+.ins-code {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+.ins-code-p { background: color-mix(in oklab, var(--up) 18%, transparent); color: var(--up); }
+.ins-code-s { background: color-mix(in oklab, var(--down) 18%, transparent); color: var(--down); }
+
+.is-up { color: var(--up); }
+.is-down { color: var(--down); }
+
+.ins-table a { color: var(--ink-faint); text-decoration: none; }
+.ins-table a:hover { color: var(--accent); }
+
+/* --- footer --- */
+
+.ins-note { padding: 18px; color: var(--ink-faint); text-align: center; }
+
+.ins-error {
+  flex: none;
+  padding: 10px 12px;
+  background: var(--panel);
+  border-left: 3px solid var(--down);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+.ins-error p { margin: 4px 0 0; color: var(--ink-soft); }
+
+.ins-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 4px;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+.ins-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+.ins-stat { display: flex; gap: 5px; align-items: baseline; }
+.ins-stat-k { text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; }
+.ins-stat-v { color: var(--ink-soft); font-variant-numeric: var(--nums); }
+
+.ins-page { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.ins-page button {
+  font: inherit;
+  font-size: 11px;
+  color: var(--ink-soft);
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 3px 9px;
+  cursor: pointer;
+}
+.ins-page button:disabled { opacity: 0.4; cursor: default; }
+
+@media (max-width: 1000px) {
+  .ins-co, .ins-who { max-width: 120px; }
+}
+
+/* ---- restored predecessor screens: context heading, drill-ins, workbench ---- */
+
+.ins-context {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; margin-bottom: 10px;
+  background: var(--wash); border: 1px solid var(--hairline); border-radius: var(--radius);
+  font-size: 13px;
+}
+.ins-context-kind {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--accent);
+}
+.ins-context b { color: var(--ink); font-weight: 600; }
+.ins-context button {
+  margin-left: auto; border: 0; background: none; color: var(--ink-faint);
+  cursor: pointer; font-size: 12px; padding: 2px 4px;
+}
+.ins-context button:hover { color: var(--ink); }
+
+.ins-drill {
+  border: 0; background: none; padding: 0; font: inherit; cursor: pointer;
+  color: var(--ink); border-bottom: 1px dotted var(--ink-fainter);
+}
+.ins-drill:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.ins-tk .ins-drill { font-family: var(--font-code); font-weight: 600; }
+
+.ins-adv { margin-bottom: 10px; }
+.ins-adv > summary {
+  list-style: none; cursor: pointer; display: inline-flex; align-items: baseline; gap: 10px;
+  font-size: 12px; font-weight: 600; color: var(--ink-soft); padding: 4px 2px;
+}
+.ins-adv > summary::-webkit-details-marker { display: none; }
+.ins-adv > summary::before { content: "▸"; font-size: 10px; color: var(--ink-faint); }
+.ins-adv[open] > summary::before { content: "▾"; }
+.ins-adv-hint { font-size: 11px; font-weight: 400; color: var(--ink-fainter); }
+.ins-advgrid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px 14px; padding: 10px 2px 4px;
+}
+.ins-pair { display: flex; gap: 6px; }
+.ins-pair input { min-width: 0; flex: 1; }
+.ins-adv-roles { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 2px 4px; }
+
+.ins-active { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.ins-chip-active { background: var(--wash); border-color: var(--accent); color: var(--ink); }
+
+
+/* ============================================================ *
+ *  RAIL + MAIN
+ *
+ *  The filter vocabulary used to sit in a stack above the results:
+ *  screens, then forty controls in collapsible groups, then the
+ *  chips. On any window shorter than a monitor that pushed the
+ *  table itself below the fold, so the loop was adjust → scroll
+ *  down → read → scroll up. Beside the table, a filter and its
+ *  consequence are visible at the same time.
+ *
+ *  Same shape as the other four Company surfaces: the shared
+ *  company input at the top of a sticky rail, this surface's own
+ *  controls under it, results to the right.
+ *
+ *  This block lived at the foot of the file once before and was
+ *  deleted by a sweep that removed "everything from the first mode
+ *  stylesheet to the end". It sits after the modes are gone, so
+ *  there is nothing left to sweep — but if a whole trailing section
+ *  is ever cut again, check this survived.
+ * ============================================================ */
+.insider-surface {
+  flex-direction: row;
+  align-items: flex-start;
+}
+.ins-rail {
+  flex: 0 0 336px; align-self: flex-start;
+  position: sticky; top: 0; z-index: 5;
+  max-height: calc(100vh - var(--topbar-h) - var(--gutter) * 2);
+  overflow-y: auto; overscroll-behavior: contain;
+  display: flex; flex-direction: column; gap: var(--gutter);
+}
+.ins-rail::-webkit-scrollbar { width: 7px; }
+.ins-rail::-webkit-scrollbar-track { background: transparent; }
+.ins-rail::-webkit-scrollbar-thumb { background: var(--hairline); border-radius: 999px; }
+.ins-main {
+  flex: 1 1 auto; min-width: 0; min-height: 0;
+  display: flex; flex-direction: column; gap: var(--gutter);
+}
+
+/* The panel and the screen board were laid out for full width — a horizontal
+   top row, a multi-column grid of controls, screens in wide labelled rows. In
+   a 336px rail every one of those becomes one column. */
+.ins-rail .ins-panel { margin: 0; }
+.ins-rail .ins-panel-top { flex-wrap: wrap; gap: 6px; }
+.ins-rail .ins-searchbox { flex: 1 1 100%; min-width: 0; }
+.ins-rail .ins-cats { display: block; columns: auto; }
+.ins-rail .ins-advgrid { grid-template-columns: 1fr; }
+.ins-rail .ins-adv-roles { grid-template-columns: 1fr 1fr; }
+.ins-rail .ins-pair { flex-wrap: wrap; }
+
+@media (max-width: 1100px) {
+  .insider-surface { flex-direction: column; }
+  .ins-rail {
+    flex: 0 0 auto; width: 100%; align-self: stretch;
+    position: static; max-height: none; overflow: visible;
+  }
+}

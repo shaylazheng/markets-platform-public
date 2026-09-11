@@ -1,0 +1,16 @@
+{
+  "name": "@markets/outlook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Risks and catalysts \u2014 the company's own account from its filings, and the street's, kept apart and each linked to its source.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/core": "*",
+    "@markets/shell": "*",
+    "rss-parser": "^3.13.0"
+  }
+}

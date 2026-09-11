@@ -1,0 +1,14 @@
+{
+  "name": "@markets/calendar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Release calendar: macro schedule plus Nasdaq earnings reporters.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/shell": "*"
+  }
+}

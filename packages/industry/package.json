@@ -1,0 +1,15 @@
+{
+  "name": "@markets/industry",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The industry around a company, from SEC data alone: the SIC code its filings carry, every listed registrant filing under the same code, and where the company sits in that population by measured revenue.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/core": "*",
+    "@markets/shell": "*"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@markets/graph",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The d3 supply-chain force graph and its research pipeline.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/core": "*",
+    "@markets/shell": "*",
+    "rss-parser": "^3.13.0"
+  }
+}

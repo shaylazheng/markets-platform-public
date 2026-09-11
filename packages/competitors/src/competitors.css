@@ -1,0 +1,588 @@
+/* Competitors surface.
+ *
+ * Imported LAST in main.jsx but declares NO :root block and redefines NO
+ * tokens, so bloom.css remains the authority on the palette — the same
+ * contract insider.css already honours. Every colour here is a var().
+ */
+
+/* The one surface in the app whose body scrolls. The shell still doesn't:
+   .cmp-surface simply takes over the role .pnl-body plays elsewhere, because
+   thirteen panels cannot share one viewport height.
+
+   Two columns: the input rail, and everything else. The rail used to be a
+   full-width row across the top, which cost the surface ~110px of height it
+   could not spare and put the peer chips a long way from the table they
+   control. As a sticky left column it is the same treatment Valuation's
+   assumptions rail gets — the controls stay on screen while the thing they
+   drive scrolls past them, which is the whole reason that layout works there. */
+.cmp-surface {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gutter);
+  padding: var(--gutter);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.cmp-main {
+  flex: 1 1 auto; min-width: 0;
+  display: flex; flex-direction: column; gap: var(--gutter);
+}
+.cmp-surface::-webkit-scrollbar { width: 9px; }
+.cmp-surface::-webkit-scrollbar-track { background: transparent; }
+.cmp-surface::-webkit-scrollbar-thumb {
+  background: var(--hairline); border-radius: 999px; border: 2px solid var(--bg);
+}
+
+.cmp-band { display: flex; gap: var(--gutter); flex: 0 0 auto; }
+.cmp-band > .pnl { flex: 1 1 auto; min-width: 0; }
+.cmp-band-2 > .pnl { flex: 1 1 50%; }
+
+/* ---- the rail ----------------------------------------------------------- */
+
+/* The column holds the sticky and the scroll; the rail inside it is just a
+   panel. Sources is its sibling, so the two scroll and stick as one block —
+   which is why the column exists rather than the rail simply growing. */
+.cmp-railcol {
+  flex: 0 0 300px; align-self: flex-start;
+  position: sticky; top: 0; z-index: 5;
+  /* The column can outgrow the viewport once a company has fifteen peers, ten
+     suggestions and an open source inspector, so it scrolls itself rather than
+     pushing its own bottom off the screen where sticky cannot reach it. */
+  max-height: calc(100vh - var(--topbar-h) - var(--gutter) * 2);
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: var(--gutter);
+}
+.cmp-railcol > * { flex: 0 0 auto; }
+.cmp-railcol::-webkit-scrollbar { width: 7px; }
+.cmp-railcol::-webkit-scrollbar-track { background: transparent; }
+.cmp-railcol::-webkit-scrollbar-thumb { background: var(--hairline); border-radius: 999px; }
+
+.cmp-rail {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 10px 12px 12px;
+  background: var(--panel); border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Stacked, not inline. Each row is a labelled block: the label sits above its
+   controls the way .field-label does everywhere else, instead of holding a
+   62px gutter open down the left of a 300px column. */
+.cmp-rail-row {
+  display: flex; align-items: flex-start; gap: 5px; flex-wrap: wrap;
+}
+.cmp-raillabel {
+  flex: 0 0 100%;
+  font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.11em; color: var(--ink-fainter);
+  margin-bottom: 1px;
+}
+.cmp-focalform { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.cmp-focalform label {
+  font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.11em; color: var(--ink-fainter);
+}
+.cmp-focalform input {
+  font: inherit; font-size: 0.82rem; font-family: var(--font-code);
+  padding: 5px 8px; width: 100%;
+  background: var(--panel-2); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+}
+.cmp-focalform input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* The identity block: ticker, name, industry, and the two cross-surface links.
+   Stacked in a narrow column — inline, the SIC description alone wrapped to
+   three ragged lines between the name and the buttons. */
+.cmp-focalchip {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  width: 100%; min-width: 0;
+  padding-top: 2px; border-top: 1px solid var(--hairline-soft);
+}
+.cmp-focalchip b { font-family: var(--font-code); font-size: 1.05rem; letter-spacing: 0.01em; }
+.cmp-focalname { color: var(--ink-soft); font-size: 0.8rem; line-height: 1.35; }
+.cmp-sic { color: var(--ink-fainter); font-size: 0.72rem; line-height: 1.4; }
+.cmp-focalchip .cmp-links { margin-top: 4px; }
+
+.cmp-chip {
+  display: inline-flex; align-items: stretch;
+  border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+  overflow: hidden; background: var(--panel-2);
+}
+.cmp-chip.is-spot { border-color: var(--accent); }
+.cmp-chip-spot, .cmp-chip-x {
+  font: inherit; font-size: 0.76rem; font-family: var(--font-code);
+  background: none; border: 0; color: var(--ink-soft); cursor: pointer; padding: 3px 7px;
+}
+.cmp-chip-x { color: var(--ink-fainter); border-left: 1px solid var(--hairline); }
+.cmp-chip-spot:hover, .cmp-chip-x:hover { color: var(--ink); background: var(--panel); }
+.cmp-chip.is-spot .cmp-chip-spot { color: var(--ink); font-weight: 600; }
+
+/* A suggestion is a two-part control: the mark opens its provenance, the ticker
+   adds the peer. `.cmp-sugg` is the shell for both, and is still a <button>
+   itself for "+ top 5". */
+.cmp-sugg {
+  font: inherit; font-size: 0.76rem; font-family: var(--font-code);
+  display: inline-flex; align-items: stretch;
+  padding: 0; cursor: pointer;
+  background: none; color: var(--ink-soft);
+  border: 1px dashed var(--hairline); border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.cmp-sugg:hover { color: var(--ink); border-style: solid; border-color: var(--accent); }
+.cmp-sugg.is-sel { border-style: solid; border-color: var(--accent); }
+.cmp-sugg-mark, .cmp-sugg-tk {
+  font: inherit; background: none; border: 0; cursor: pointer;
+  color: inherit; padding: 3px 6px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.cmp-sugg-mark {
+  color: var(--ink-fainter); border-right: 1px solid var(--hairline);
+}
+.cmp-sugg-mark:hover, .cmp-sugg-mark[aria-pressed="true"] { color: var(--accent); }
+.cmp-sugg-tk:hover { color: var(--ink); }
+.cmp-sugg-all { padding: 3px 7px; border-style: solid; }
+.cmp-hasnote { color: var(--accent); font-size: 8px; }
+
+/* Standing facts about the focal company. A hairline rule, never --down: a bank
+   having no gross margin and a company having stopped filing are both correct
+   states of the world, not errors, and colouring them red would say otherwise.
+   Same reasoning as .cmp-empty for an unwritten deep dive. */
+.cmp-notice { align-items: flex-start; }
+.cmp-notice-item {
+  flex: 1 1 320px; min-width: 0;
+  padding: 6px 10px; border-left: 2px solid var(--hairline);
+  background: var(--panel-2); border-radius: var(--radius-sm);
+  font-size: 0.74rem; line-height: 1.5; color: var(--ink-faint);
+}
+.cmp-notice-item b { color: var(--ink-soft); font-weight: 600; }
+
+.cmp-links { display: inline-flex; gap: 5px; }
+.cmp-link {
+  font: inherit; font-size: 0.72rem; padding: 2px 7px; cursor: pointer;
+  background: none; color: var(--ink-faint);
+  border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+}
+.cmp-link:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ---- splash ------------------------------------------------------------- */
+
+.cmp-splash { padding: 48px 20px; max-width: 620px; margin: 0 auto; text-align: center; }
+.cmp-splash h2 { font-size: 1.1rem; font-weight: 600; margin: 0 0 10px; }
+.cmp-splash p { color: var(--ink-soft); font-size: 0.84rem; line-height: 1.55; margin: 0 0 8px; }
+
+/* ---- the matrix --------------------------------------------------------- */
+
+.cmp-matrix-wrap {
+  max-height: 46vh; overflow: auto; background: var(--panel);
+}
+.cmp-matrix {
+  width: 100%; border-collapse: collapse;
+  font-size: 12px; font-variant-numeric: var(--nums);
+}
+.cmp-matrix thead th {
+  position: sticky; z-index: 2; background: var(--panel-head);
+  color: var(--ink-faint); font-weight: 500; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 6px 8px; white-space: nowrap; text-align: right;
+  border-bottom: 1px solid var(--hairline);
+}
+.cmp-groups th { top: 0; text-align: center; border-left: 1px solid var(--hairline-soft); }
+.cmp-metrics th { top: 23px; cursor: pointer; }
+.cmp-metrics th:hover { color: var(--ink); }
+.cmp-metrics th.is-sel { color: var(--accent); }
+.cmp-matrix thead th:first-child { left: 0; z-index: 3; text-align: left; }
+
+/* Stick the CELLS, not the row: a sticky <tr> is not honoured across engines.
+   The focal row is marked by an inset accent bar instead of only by position. */
+.cmp-matrix tbody tr.is-focal > * {
+  position: sticky; top: 46px; z-index: 1; background: var(--panel);
+  box-shadow: inset 0 -1px 0 var(--hairline), inset 2px 0 0 var(--accent);
+}
+.cmp-matrix th[scope="row"] {
+  position: sticky; left: 0; z-index: 1; background: var(--panel);
+  font-family: var(--font-code); font-weight: 600; text-align: left;
+  padding: 4px 9px; white-space: nowrap;
+}
+.cmp-matrix td {
+  padding: 4px 9px; text-align: right; white-space: nowrap;
+  border-bottom: 1px solid var(--hairline-soft); color: var(--ink);
+}
+/* The matrix picks up the watchlist's row rhythm, so a table here scans like a
+   table on Markets: hover tints rather than brightens. */
+.cmp-matrix tbody tr:hover td { background: var(--panel-2); }
+
+/* Diverging, two hues, neutral midpoint — the midpoint being no fill at all.
+   Capped at 22% so the number never fights its own cell (insider.css:163 uses
+   18% for the same reason). */
+.cmp-cell.is-better { background: color-mix(in oklab, var(--up) calc(var(--a) * 100%), transparent); }
+.cmp-cell.is-worse { background: color-mix(in oklab, var(--down) calc(var(--a) * 100%), transparent); }
+
+/* Three empty states, separated by glyph and weight rather than colour alone —
+   the same reasoning as the category glyphs at base.css:714-729. */
+.cmp-cell.is-missing { color: var(--ink-fainter); }
+/* ƒ — a value computed here by a stated formula (see the cell title), never a
+   filed read. Same convention as the Industry surface's .ind-drv. */
+.cmp-cell.is-drv { text-decoration: underline dotted var(--accent) 1px; text-underline-offset: 3px; }
+.cmp-drv { color: var(--accent); font-weight: 700; font-size: 0.68em; line-height: 0; margin-left: 1px; }
+.cmp-cell.is-na {
+  color: var(--ink-fainter); font-style: italic;
+  background-image: repeating-linear-gradient(135deg,
+    var(--hairline-soft) 0 1px, transparent 1px 6px);
+}
+
+.cmp-tk {
+  font: inherit; font-family: var(--font-code); font-weight: 600;
+  background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink);
+}
+.cmp-tk:hover { color: var(--accent); }
+.cmp-tk.is-focal { color: var(--accent); }
+.cmp-basis {
+  font-size: 8px; vertical-align: super; color: var(--ink-fainter); margin-left: 3px;
+}
+.cmp-sortmark { margin-left: 3px; color: var(--ink-faint); }
+.cmp-degree { color: var(--ink-fainter); }
+.cmp-ranktoggle {
+  font: inherit; font-size: 11px; background: none; cursor: pointer;
+  border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+  color: var(--ink-faint); padding: 1px 6px;
+}
+.cmp-ranktoggle[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+
+.cmp-row-pending td { color: var(--ink-fainter); font-style: italic; }
+.cmp-row-err td { color: var(--down); }
+.cmp-shimmer {
+  display: inline-block; width: 42px; height: 7px; margin-right: 8px;
+  border-radius: 999px; background: var(--hairline);
+  animation: cmp-pulse 1.2s ease-in-out infinite;
+}
+@keyframes cmp-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.9; } }
+
+.cmp-cats { display: inline-flex; gap: 4px; }
+.cmp-cat {
+  font: inherit; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 2px 6px; cursor: pointer; background: none;
+  color: var(--ink-fainter); border: 1px solid transparent; border-radius: var(--radius-sm);
+}
+.cmp-cat.is-on { color: var(--ink-soft); border-color: var(--hairline); background: var(--panel-2); }
+.cmp-head-meta { font-size: 10px; color: var(--ink-fainter); margin-left: auto; }
+
+/* ---- plots -------------------------------------------------------------- */
+
+/* Explicit pixel heights, never flex:1. Chart.js runs with
+   maintainAspectRatio:false, so a parent that collapses to auto height renders
+   a zero-pixel canvas — which is exactly what .app does below 1000px. */
+.cmp-plot { position: relative; height: 220px; }
+.cmp-plot-tall { height: 280px; }
+
+.cmp-legend { display: flex; gap: 12px; flex-wrap: wrap; padding: 0 0 6px; }
+.cmp-legend-item {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.72rem; font-family: var(--font-code); color: var(--ink-soft);
+}
+.cmp-asof { font-size: 0.68rem; color: var(--ink-fainter); padding-top: 6px; line-height: 1.45; }
+
+/* ---- insider pulse ------------------------------------------------------ */
+
+.cmp-pulse { display: flex; flex-direction: column; gap: 3px; }
+.cmp-pulse-row { display: grid; grid-template-columns: 52px 1fr 84px 52px 28px; align-items: center; gap: 8px; }
+.cmp-pulse-row.is-focal { background: var(--panel-2); border-radius: var(--radius-sm); }
+.cmp-pulse-row.is-sel { box-shadow: inset 2px 0 0 var(--accent); border-radius: var(--radius-sm); }
+.cmp-pulse-track { height: 7px; background: var(--hairline-soft); border-radius: 999px; overflow: hidden; }
+.cmp-pulse-bar { display: block; height: 100%; border-radius: 999px; }
+.cmp-pulse-bar.up { background: var(--up); }
+.cmp-pulse-bar.down { background: var(--down); }
+.cmp-pulse-val { text-align: right; font-size: 0.75rem; font-variant-numeric: var(--nums); }
+.cmp-pulse-val.up { color: var(--up); }
+.cmp-pulse-val.down { color: var(--down); }
+.cmp-pulse-n { font-size: 0.68rem; color: var(--ink-fainter); text-align: right; }
+
+/* The qualitative half of the flow, on its own line under the bar. Spans the
+   whole grid so it is read as an annotation of the row above, not a column. */
+.cmp-statline {
+  grid-column: 1 / -1;
+  display: flex; flex-wrap: wrap; gap: 4px 10px;
+  padding: 1px 0 5px 60px;
+}
+.cmp-stat {
+  font-size: 0.68rem; color: var(--ink-faint); white-space: nowrap; cursor: help;
+}
+/* A purchase is the rare, informative side; it is the only thing here that
+   earns a colour. */
+.cmp-stat.is-buy { color: var(--up); }
+.cmp-stat.is-muted { color: var(--ink-fainter); }
+.cmp-stat + .cmp-stat::before {
+  content: '·'; margin-right: 10px; color: var(--ink-fainter);
+}
+
+/* ---- insider track record ------------------------------------------------ */
+
+.cmp-record { margin-top: 10px; border-top: 1px solid var(--hairline-soft); padding-top: 8px; }
+.cmp-record-head {
+  font: inherit; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+  background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink-faint);
+  display: flex; width: 100%; align-items: center; justify-content: space-between;
+}
+.cmp-record-head:hover { color: var(--ink); }
+.cmp-record-caret { color: var(--ink-fainter); }
+.cmp-record-hint {
+  font-size: 0.7rem; color: var(--ink-fainter); line-height: 1.45; padding-top: 4px;
+}
+
+.cmp-rec-tbl {
+  width: 100%; border-collapse: collapse; margin-top: 7px;
+  font-size: 0.74rem; font-variant-numeric: var(--nums);
+}
+.cmp-rec-tbl thead th {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--ink-fainter); font-weight: 500; text-align: right;
+  padding: 0 0 4px; border-bottom: 1px solid var(--hairline-soft);
+}
+.cmp-rec-tbl thead th:first-child, .cmp-rec-tbl th[scope="row"] { text-align: left; }
+.cmp-rec-tbl th[scope="row"] {
+  font-family: var(--font-code); font-weight: 600; color: var(--ink); padding: 4px 0;
+}
+.cmp-rec-tbl tr.is-focal th[scope="row"] { color: var(--accent); }
+.cmp-rec-tbl td { padding: 4px 0 4px 10px; text-align: right; vertical-align: baseline; }
+.cmp-rec-n { color: var(--ink-faint); }
+
+.cmp-rec-cell { cursor: help; }
+.cmp-rec-val { display: block; }
+.cmp-rec-val.up { color: var(--up); }
+.cmp-rec-val.down { color: var(--down); }
+.cmp-rec-hit { display: block; font-size: 0.62rem; color: var(--ink-fainter); }
+/* Too few observations for a mean to mean anything. Dimmed rather than hidden:
+   the number is real, it is the INFERENCE that is unsupported, and hiding it
+   would be a different kind of lie. */
+.cmp-rec-cell.is-thin .cmp-rec-val { color: var(--ink-faint); font-style: italic; }
+.cmp-rec-cell.is-none { color: var(--ink-fainter); }
+
+/* ---- wire --------------------------------------------------------------- */
+
+.cmp-wire { display: flex; flex-direction: column; max-height: 260px; overflow: auto; }
+.cmp-wire-row {
+  display: grid; grid-template-columns: 52px 52px 1fr 74px 28px;
+  gap: 8px; align-items: baseline; padding: 5px 10px;
+  border-bottom: 1px solid var(--hairline-soft); font-size: 0.76rem;
+}
+.cmp-wire-row.is-hot { background: color-mix(in oklab, var(--accent) 6%, transparent); }
+.cmp-wire-row.is-sel { box-shadow: inset 2px 0 0 var(--accent); }
+.cmp-wire-ch { font-size: 0.66rem; color: var(--ink-fainter); text-transform: uppercase; }
+.cmp-wire-title { color: var(--ink); text-decoration: none; }
+.cmp-wire-title:hover { color: var(--accent); }
+.cmp-wire-ts { font-size: 0.66rem; color: var(--ink-fainter); text-align: right; }
+
+/* ---- deep dive ---------------------------------------------------------- */
+
+.cmp-dd-head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; }
+.cmp-dd-kicker {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-fainter);
+}
+.cmp-dd-grid {
+  display: grid; gap: var(--gutter);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.cmp-dd-slot { background: var(--panel-2); border-radius: var(--radius); padding: 10px 12px; }
+.cmp-dd-slot h4 {
+  margin: 0 0 6px; font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint);
+}
+.cmp-dd-slot p { margin: 0; font-size: 0.8rem; line-height: 1.5; color: var(--ink); }
+.cmp-dd-risks { margin: 0; padding-left: 18px; font-size: 0.8rem; line-height: 1.5; }
+.cmp-dd-peers { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
+.cmp-dd-peers td { padding: 2px 6px 2px 0; vertical-align: top; }
+.cmp-dd-verdict { color: var(--ink); }
+.cmp-dd-note { color: var(--ink-soft); }
+.cmp-unwritten { color: var(--ink-fainter); font-style: italic; font-size: 0.78rem; }
+
+/* An empty deep dive is an invitation, not a failure — hairline rule, never
+   --down. Only a CORRUPT file gets the error treatment. */
+.cmp-empty {
+  padding: 14px 16px; border-left: 3px solid var(--hairline);
+  background: var(--panel-2); border-radius: var(--radius-sm);
+  color: var(--ink-faint); font-size: 0.8rem; line-height: 1.55;
+}
+.cmp-empty-lead { margin: 0 0 6px; color: var(--ink); font-size: 0.86rem; }
+.cmp-empty p { margin: 0 0 8px; }
+.cmp-empty code { font-family: var(--font-code); font-size: 0.76rem; color: var(--ink); }
+.cmp-empty-json {
+  margin: 6px 0; padding: 10px 12px; overflow-x: auto;
+  background: var(--panel); border-radius: var(--radius-sm);
+  font-family: var(--font-code); font-size: 0.72rem; line-height: 1.45; color: var(--ink-soft);
+}
+.cmp-empty-foot { color: var(--ink-fainter); font-size: 0.74rem; }
+.cmp-copy {
+  font: inherit; font-size: 0.7rem; padding: 2px 8px; cursor: pointer;
+  background: var(--panel); color: var(--ink-faint);
+  border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+}
+.cmp-copy:hover { color: var(--accent); border-color: var(--accent); }
+
+.cmp-error {
+  padding: 14px 16px; border-left: 3px solid var(--down);
+  background: var(--panel-2); border-radius: var(--radius-sm); font-size: 0.8rem;
+}
+.cmp-error p { margin: 4px 0 0; color: var(--ink-soft); }
+
+/* ---- source inspector ---------------------------------------------------- */
+
+/* The inspector's own styles (.si-*) moved to the shell with the component —
+   every Company surface renders it now. What stays is this surface's use of
+   it: cell selection, the stale badge, and the graph cross-reference note. */
+
+.cmp-matrix th[scope="row"] .si-srcbtn { margin-left: 6px; }
+.cmp-matrix .cmp-cell { cursor: pointer; }
+/* Selection is a RING, not a fill: the cell's own diverging tint is carrying a
+   value and must survive being selected. */
+.cmp-matrix .cmp-cell.is-sel { box-shadow: inset 0 0 0 1.5px var(--accent); }
+
+/* The vintage badge, for a row whose numbers are a year or more behind the
+   table's newest. Not --down: old-but-correct is not an error. */
+.cmp-stale {
+  font-size: 8px; vertical-align: super; margin-left: 3px;
+  color: var(--ink-faint); font-family: var(--font-code);
+  border-bottom: 1px dotted var(--ink-fainter); cursor: help;
+}
+
+.cmp-src-graphnote {
+  margin-top: 10px; padding: 7px 9px; font-size: 0.72rem; line-height: 1.45;
+  color: var(--ink-faint); background: var(--panel-2); border-radius: var(--radius-sm);
+}
+
+/* ---- breakpoints -------------------------------------------------------- */
+
+@media (max-width: 1240px) {
+  .cmp-band-2 { flex-direction: column; }
+  .cmp-matrix-wrap { max-height: 40vh; }
+  .cmp-railcol { flex-basis: 262px; }
+}
+
+@media (max-width: 1000px) {
+  /* base.css:637 sets body{overflow:auto} here, so keeping our own scroller
+     would nest two scrollbars. */
+  .cmp-surface { height: auto; overflow: visible; flex-direction: column; }
+  /* A 300px rail beside a 700px workspace is not a rail, it is a third of the
+     screen. Below this it goes back to being a band across the top. */
+  .cmp-railcol {
+    flex: 0 0 auto; width: 100%; align-self: stretch;
+    position: static; max-height: none; overflow: visible;
+  }
+  /* base.css:644 uses !important inside this breakpoint, and specificity
+     beats import order — this is the only !important in the file. */
+  .cmp-surface .pnl { max-height: none !important; }
+  .cmp-matrix-wrap { max-height: 60vh; }
+  .cmp-dd-grid { grid-template-columns: 1fr; }
+}
+
+/* ---- the readout strip, borrowed from base.css's .chart-stats ------------
+   The sentence the matrix makes you assemble yourself: twelve numbers in a
+   column answer "what is Intel's gross margin"; none of them answers "and is
+   that good", which needs the peer median and a rank — both computable from
+   the rows on screen. */
+.cmp-readout { display: flex; margin: 8px 11px; border-top: none; }
+.cmp-readout .cs-cell:first-child .cs-value { font-family: var(--font-code); }
+.cmp-readout .cs-value.cmp-readout-basis {
+  font-size: 0.62rem; font-weight: 500; color: var(--ink-fainter);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+/* ---- the chart deck ------------------------------------------------------
+   Seven charts in one panel. The switcher and the axis pickers live in the
+   panel header, which is where every other per-panel control on this dashboard
+   already sits — putting them above the plot would have added a second control
+   strip inside a panel that already has one. */
+.cmp-deck-switch { display: inline-flex; align-items: center; gap: 6px; }
+.cmp-deck-switch .seg button { padding: 3px 9px; font-size: 0.7rem; }
+
+/* The panel measures itself, not the viewport. */
+.cmp-band { container-type: inline-size; }
+.cmp-deck-select {
+  display: none;
+  font: inherit; font-size: 0.7rem; padding: 2px 6px; cursor: pointer;
+  background: var(--panel-2); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+}
+@container (max-width: 620px) {
+  .cmp-deck-switch .seg { display: none; }
+  .cmp-deck-select { display: inline-block; }
+  /* The axis pickers cost another 300px on top; below this they go too, and
+     Position falls back to the growth/margin pair it defaults to. */
+  .cmp-deck-axes { display: none; }
+}
+
+.cmp-deck-axes { display: inline-flex; align-items: center; gap: 8px; margin-right: 4px; }
+.cmp-deck-axis { display: inline-flex; align-items: center; gap: 4px; }
+.cmp-deck-axis > span {
+  font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--ink-fainter);
+}
+.cmp-deck-axis select {
+  font: inherit; font-size: 0.7rem; max-width: 150px;
+  padding: 2px 5px; cursor: pointer;
+  background: var(--panel-2); color: var(--ink-soft);
+  border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+}
+.cmp-deck-axis select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* The deck is the tallest thing on the surface and the one panel worth giving
+   real height to, now that it is carrying seven charts instead of one. */
+.cmp-band .cmp-plot { height: 260px; }
+.cmp-band .cmp-plot-tall { height: 340px; }
+
+/* A twelve-row profile or a fifteen-peer spread needs more room than a
+   five-series line chart; both are drawn on the tall canvas. */
+@media (max-height: 900px) {
+  .cmp-band .cmp-plot { height: 220px; }
+  .cmp-band .cmp-plot-tall { height: 280px; }
+}
+
+/* ---- competitors by segment ---------------------------------------------- *
+ *
+ * One row per reportable segment: name and size on the head line, then the
+ * competitor chips. A chip already in the comparison reads as pressed; a
+ * private competitor is a flat name — real competition with no row to add. */
+.cmp-segc { display: flex; flex-direction: column; gap: 12px; }
+.cmp-segc-note { margin: 0; font-size: 0.8rem; line-height: 1.6; color: var(--ink-faint); }
+.cmp-segc-row { min-width: 0; }
+.cmp-segc-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+.cmp-segc-head > b { font-size: 0.8rem; color: var(--ink); }
+.cmp-segc-meta { font-size: 0.66rem; color: var(--ink-fainter); font-variant-numeric: var(--nums); }
+.cmp-segc-all {
+  margin-left: auto;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 0.62rem;
+  padding: 1px 7px;
+  cursor: pointer;
+}
+.cmp-segc-all:hover { border-color: var(--accent); color: var(--accent); }
+.cmp-segc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cmp-segc-chip {
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  padding: 2px 10px;
+  cursor: pointer;
+}
+.cmp-segc-chip:hover { border-color: var(--accent); color: var(--ink); }
+.cmp-segc-chip.is-on { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.cmp-segc-chip:disabled { cursor: default; opacity: 0.7; }
+.cmp-segc-nm { font-weight: 400; color: var(--ink-fainter); }
+.cmp-segc-priv {
+  border: 1px dashed var(--hairline);
+  border-radius: 999px;
+  color: var(--ink-fainter);
+  font-size: 0.7rem;
+  padding: 2px 10px;
+}
+.cmp-segc-foot { margin: 2px 0 0; font-size: 0.64rem; line-height: 1.5; color: var(--ink-fainter); }

@@ -1,0 +1,14 @@
+{
+  "name": "@markets/learn",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The Claude tutor, quiz and daily read.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/shell": "*"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@markets/valuation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reverse DCF \u2014 what growth the price is paying for.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/competitors": "*",
+    "@markets/core": "*",
+    "@markets/shell": "*"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@markets/competitors",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Peer ratio matrix and deep dive.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/core": "*",
+    "@markets/graph": "*",
+    "@markets/insider": "*",
+    "@markets/shell": "*"
+  }
+}

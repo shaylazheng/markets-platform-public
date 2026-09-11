@@ -1,0 +1,14 @@
+{
+  "name": "@markets/markets",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "FRED charts, watchlist and the focal series.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/shell": "*"
+  }
+}

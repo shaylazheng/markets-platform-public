@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Markets &amp; Learning</title>
+  <script>
+    // Theme and look are stamped before first paint so there is no flash.
+    (function () {
+      var q = new URLSearchParams(location.search), r = document.documentElement;
+      r.setAttribute('data-theme', q.get('theme') || localStorage.getItem('theme') || 'dark');
+      r.setAttribute('data-booting', '');
+    })();
+  </script>
+  <!--
+    The boot cover's CSS is INLINE and its tokens are literals, both on purpose.
+
+    In a production build Vite emits a blocking <link> for base.css, so the
+    palette would be there in time; in dev the stylesheet is injected by
+    JavaScript, which is precisely the window this cover exists to fill. A
+    var(--bg) here would resolve to nothing on exactly the load it matters most.
+    So the four colours it needs are written out for both themes, and
+    bloom.css remains the authority for everything after the cover lifts.
+  -->
+  <style>
+    #boot {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 16px; padding: 24px;
+      background: #0d1117; color: #e6edf3;
+      font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      transition: opacity 260ms ease;
+    }
+    :root[data-theme="light"] #boot { background: #f6f8fa; color: #1f2328; }
+    #boot.is-going { opacity: 0; pointer-events: none; }
+    /* The cover owns the viewport while it is up, so nothing behind it scrolls. */
+    :root[data-booting] body { overflow: hidden; }
+
+    #boot-mark {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid rgba(127, 140, 160, 0.28);
+      border-top-color: #4c8eff;
+      animation: boot-spin 720ms linear infinite;
+    }
+    #boot-title { font-size: 13px; font-weight: 600; }
+    #boot-note {
+      font-size: 11px; color: #8b949e; font-variant-numeric: tabular-nums;
+      min-height: 1.2em; text-align: center;
+    }
+    :root[data-theme="light"] #boot-note { color: #656d76; }
+
+    #boot-track {
+      width: 236px; height: 3px; border-radius: 999px; overflow: hidden;
+      background: rgba(127, 140, 160, 0.2);
+    }
+    #boot-bar { height: 100%; border-radius: 999px; background: #4c8eff; }
+    #boot-bar[data-mode="determinate"] { width: var(--p, 6%); transition: width 220ms ease; }
+    /* Nothing countable yet: sweep, rather than sit at a made-up percentage. */
+    #boot-bar[data-mode="indeterminate"] { width: 38%; animation: boot-sweep 1150ms ease-in-out infinite; }
+
+    #boot-skip {
+      font: inherit; font-size: 11px; padding: 4px 11px; cursor: pointer;
+      background: none; color: #8b949e;
+      border: 1px solid rgba(127, 140, 160, 0.3); border-radius: 6px;
+    }
+    #boot-skip:hover { color: #e6edf3; border-color: #4c8eff; }
+    :root[data-theme="light"] #boot-skip:hover { color: #1f2328; }
+    #boot-fallback {
+      display: none; font-size: 11px; color: #8b949e;
+      max-width: 36ch; text-align: center; line-height: 1.55;
+    }
+    #boot-fallback code { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+    @keyframes boot-spin { to { transform: rotate(360deg); } }
+    @keyframes boot-sweep { 0% { margin-left: -38%; } 100% { margin-left: 100%; } }
+    /* Motion is decoration here — the text carries the whole message. */
+    @media (prefers-reduced-motion: reduce) {
+      #boot { transition: none; }
+      #boot-mark { animation: none; border-top-color: rgba(127, 140, 160, 0.28); }
+      #boot-bar[data-mode="indeterminate"] { animation: none; width: 100%; opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    Painted with the first frame, before the ~620KB bundle parses. Deliberately
+    not a React component — see the header of web/src/lib/boot.js, which is its
+    only driver.
+  -->
+  <div id="boot" role="status" aria-live="polite">
+    <div id="boot-mark"></div>
+    <div id="boot-title">Markets Platform</div>
+    <div id="boot-track"><div id="boot-bar" data-mode="indeterminate"></div></div>
+    <div id="boot-note">starting…</div>
+    <button type="button" id="boot-skip" hidden>Show me anyway</button>
+    <noscript><div style="font-size:11px;color:#8b949e">This dashboard needs JavaScript.</div></noscript>
+    <div id="boot-fallback">
+      The app bundle hasn’t loaded. Check that the gateway is running
+      (<code>npm start</code>), then reload.
+    </div>
+  </div>
+  <div id="root"></div>
+  <script>
+    // Name the surface from the hash immediately, so the very first frame says
+    // what it is waiting for instead of spinning anonymously. The labels are
+    // duplicated from SURFACE_LABEL in lib/boot.js because that module has not
+    // parsed yet — which is the entire point of this block.
+    (function () {
+      var L = { markets: 'Markets', calendar: 'Calendar', news: 'Newswire', learn: 'Learn',
+                graph: 'Company graph', insider: 'Insider screener', competitors: 'Competitors' };
+      var h = (location.hash || '').slice(1).split('&')[0];
+      var n = document.getElementById('boot-note');
+      if (n) n.textContent = (L[h] || 'Markets') + ' · starting…';
+
+      // If the module never executes at all — bundle 404, syntax error, gateway
+      // down — nothing would ever take this cover down and it would sit there
+      // claiming to load forever. Say what actually went wrong instead.
+      setTimeout(function () {
+        if (!document.getElementById('boot')) return;
+        var f = document.getElementById('boot-fallback');
+        var m = document.getElementById('boot-mark');
+        var b = document.getElementById('boot-bar');
+        var s = document.getElementById('boot-skip');
+        if (f) f.style.display = 'block';
+        if (m) m.style.animation = 'none';
+        if (b) b.style.animation = 'none';
+        if (s) s.hidden = false;
+      }, 12000);
+    })();
+  </script>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "@markets/insider",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SEC Form 4 screener (front end; the service is services/insider).",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/shell": "*"
+  }
+}

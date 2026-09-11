@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trimmed from the REAL extracted XBRL instance of BABA 20-F accession 0001193125-26-231755
+     (baba-20260331_htm.xml). Contexts, facts and unit declarations are verbatim. Three things this
+     fixture exists to pin: (1) segment revenue tagged in CNY, resolved through OPAQUE unit ids
+     (U_CNY -> iso4217:CNY; note U_UsdCny -> iso4217:USD, so the id text proves nothing); (2) the
+     same segment tagged under TWO member names (InternationalDigitalCommerceGroupMember and
+     AlibabaInternationalDigitalCommerceGroupMember, identical figures) - the dedupe case; (3) a
+     20-F filer resolving at all. -->
+<xbrl>
+<unit id="U_ChinaPerShares">
+        <divide>
+            <unitNumerator>
+                <measure>iso4217:CNY</measure>
+            </unitNumerator>
+            <unitDenominator>
+                <measure>shares</measure>
+            </unitDenominator>
+        </divide>
+    </unit>
+<unit id="U_UsdCny">
+        <divide>
+            <unitNumerator>
+                <measure>iso4217:USD</measure>
+            </unitNumerator>
+            <unitDenominator>
+                <measure>iso4217:CNY</measure>
+            </unitDenominator>
+        </divide>
+    </unit>
+<unit id="U_pure">
+        <measure>pure</measure>
+    </unit>
+<unit id="U_Segment">
+        <measure>baba:Segment</measure>
+    </unit>
+<unit id="U_shares">
+        <measure>shares</measure>
+    </unit>
+<unit id="U_HKD">
+        <measure>iso4217:HKD</measure>
+    </unit>
+<unit id="U_CNY">
+        <measure>iso4217:CNY</measure>
+    </unit>
+<unit id="U_HongKongDollarsShare">
+        <divide>
+            <unitNumerator>
+                <measure>iso4217:HKD</measure>
+            </unitNumerator>
+            <unitDenominator>
+                <measure>shares</measure>
+            </unitDenominator>
+        </divide>
+    </unit>
+<unit id="U_UnitedStatesOfAmericaDollarsShare">
+        <divide>
+            <unitNumerator>
+                <measure>iso4217:USD</measure>
+            </unitNumerator>
+            <unitDenominator>
+                <measure>shares</measure>
+            </unitDenominator>
+        </divide>
+    </unit>
+<unit id="U_USD">
+        <measure>iso4217:USD</measure>
+    </unit>
+<context id="C_15239887-5c2a-461a-97ba-a2d066595111">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+        </entity>
+        <period>
+            <startDate>2024-04-01</startDate>
+            <endDate>2025-03-31</endDate>
+        </period>
+    </context>
+<context id="C_1ae1e3bf-e982-4733-aa91-fafb3b6fbaaa">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:AlibabaChinaE-CommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-04-01</startDate>
+            <endDate>2024-03-31</endDate>
+        </period>
+    </context>
+<context id="C_26dd7040-229f-4284-80ab-bde88a3480a0">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+        </entity>
+        <period>
+            <startDate>2023-04-01</startDate>
+            <endDate>2024-03-31</endDate>
+        </period>
+    </context>
+<context id="C_2a1be343-a7f7-4869-81cb-94b6b1651e8f">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:AlibabaInternationalDigitalCommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-04-01</startDate>
+            <endDate>2024-03-31</endDate>
+        </period>
+    </context>
+<context id="C_300636f7-a66e-4f1f-b3c6-b7607ea40649">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:CloudIntelligenceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-04-01</startDate>
+            <endDate>2026-03-31</endDate>
+        </period>
+    </context>
+<context id="C_361fc130-8a06-4907-b22c-acf76e1e313f">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">us-gaap:AllOtherSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-04-01</startDate>
+            <endDate>2026-03-31</endDate>
+        </period>
+    </context>
+<context id="C_5f9a8a06-a103-4631-b815-2db7eea3ad50">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:CloudIntelligenceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-04-01</startDate>
+            <endDate>2025-03-31</endDate>
+        </period>
+    </context>
+<context id="C_70f434b7-e6da-4678-a082-97593ecd771b">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:AlibabaChinaE-CommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-04-01</startDate>
+            <endDate>2025-03-31</endDate>
+        </period>
+    </context>
+<context id="C_90acbeb6-a2de-4688-97d9-93f9f668cc03">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">us-gaap:AllOtherSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-04-01</startDate>
+            <endDate>2025-03-31</endDate>
+        </period>
+    </context>
+<context id="C_a0067fca-6984-4518-baf2-7b2018230187">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:AlibabaInternationalDigitalCommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-04-01</startDate>
+            <endDate>2026-03-31</endDate>
+        </period>
+    </context>
+<context id="C_a6dbab57-801c-4690-b96a-ed00b70ed760">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:InternationalDigitalCommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-04-01</startDate>
+            <endDate>2025-03-31</endDate>
+        </period>
+    </context>
+<context id="C_b28071fb-3afd-4d6e-9972-1e3650e493c2">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:AlibabaInternationalDigitalCommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-04-01</startDate>
+            <endDate>2025-03-31</endDate>
+        </period>
+    </context>
+<context id="C_b7b64878-9bae-4b40-b415-84535b1a1d66">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:AlibabaChinaE-CommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-04-01</startDate>
+            <endDate>2026-03-31</endDate>
+        </period>
+    </context>
+<context id="C_bdc06c77-8884-4f62-88e4-3a439b51cc00">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+        </entity>
+        <period>
+            <startDate>2025-04-01</startDate>
+            <endDate>2026-03-31</endDate>
+        </period>
+    </context>
+<context id="C_ccd49ecc-2a75-424c-b9d3-a02484b4cb60">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:InternationalDigitalCommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-04-01</startDate>
+            <endDate>2024-03-31</endDate>
+        </period>
+    </context>
+<context id="C_d4c62138-c72d-4cae-b779-9d013bab0039">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">us-gaap:AllOtherSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-04-01</startDate>
+            <endDate>2024-03-31</endDate>
+        </period>
+    </context>
+<context id="C_d7e8c3bc-30f3-4418-8e50-be2021a34fba">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:CloudIntelligenceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-04-01</startDate>
+            <endDate>2024-03-31</endDate>
+        </period>
+    </context>
+<context id="C_f451f434-7cbc-4a3d-8dc0-957054d3ebcc">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001577552</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">baba:InternationalDigitalCommerceGroupMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-04-01</startDate>
+            <endDate>2026-03-31</endDate>
+        </period>
+    </context>
+<us-gaap:NetIncomeLoss
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_ddeed1e6-a2ce-4b8b-adeb-a99ac10bb58f"
+      unitRef="U_CNY">130109000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_940c4e9a-8c28-473b-a481-bc5d8a1663e8"
+      unitRef="U_CNY">80009000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_802b3fc2-fc38-4142-b33b-91855aac98f3"
+      unitRef="U_CNY">103592000000</us-gaap:NetIncomeLoss>
+<us-gaap:NetIncomeLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_8f6fd83e-53ce-45aa-b2d2-fc277b0f5dc8"
+      unitRef="U_USD">15018000000</us-gaap:NetIncomeLoss>
+<us-gaap:OperatingIncomeLoss
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_8967fce4-1f03-4842-b46b-5badeb375dd0"
+      unitRef="U_CNY">140905000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_b782cd80-a437-40f7-b54f-ce5cdbc6496c"
+      unitRef="U_CNY">140905000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_15e8a83c-cd68-4739-9e04-2fe6a99052ac"
+      unitRef="U_CNY">113350000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_d86f19c4-a0f1-4e5c-a7be-ae1ce1d7147c"
+      unitRef="U_CNY">113350000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_0a1056cd-5080-4124-9700-0a2c47d08266"
+      unitRef="U_CNY">50150000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_5c929009-971e-4dd9-88b3-425ff7bb00fd"
+      unitRef="U_CNY">50150000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:OperatingIncomeLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_b4c0877a-10f4-430d-a78b-8e49ef6ec057"
+      unitRef="U_USD">7270000000</us-gaap:OperatingIncomeLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_08c9a6be-42b7-4822-9f0d-7e609d883111"
+      unitRef="U_CNY">125976000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_36cf4ba6-dd45-4391-ac68-2938144121d2"
+      unitRef="U_CNY">125976000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_54525802-75b2-45f6-9bca-c8409d61a365"
+      unitRef="U_CNY">125976000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_f6d81f4b-5e5c-4f76-889f-c54b70b5dcb5"
+      unitRef="U_CNY">125976000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_304cd033-b5ac-47dd-be53-11d57f2fb294"
+      unitRef="U_CNY">71332000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_7bf4b1ce-b2a7-4757-beef-63c2bf629038"
+      unitRef="U_CNY">71332000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_b11bdcc3-3d4f-4791-846e-c93573ab776d"
+      unitRef="U_CNY">71332000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_d496c12b-c37e-495a-b94a-864ce741a3dd"
+      unitRef="U_CNY">71332000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_1d94e495-384b-4d3a-a385-a687a24d029e"
+      unitRef="U_CNY">102127000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_286321be-301b-4901-9c9f-c1b91da8f74b"
+      unitRef="U_USD">14805000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_368449a6-4ae4-4e50-9b2e-da6ae061657a"
+      unitRef="U_USD">14805000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_38818b5b-6dd5-4ca6-8bb2-bba19c1605b7"
+      unitRef="U_CNY">102127000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_7f76d9fb-14e0-41fe-a33d-189b2bddc7f9"
+      unitRef="U_USD">14805000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_ab981ab1-ac27-4128-afbd-c7390c05aaa8"
+      unitRef="U_CNY">102127000000</us-gaap:ProfitLoss>
+<us-gaap:ProfitLoss
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_c14e3493-3484-4f2a-84e7-98801e75b2cc"
+      unitRef="U_CNY">102127000000</us-gaap:ProfitLoss>
+<us-gaap:Revenues
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_66589999-7126-402f-bc2a-36a9a44d2e18"
+      unitRef="U_CNY">996347000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_7b091cf4-b217-4351-b8c4-cbef00739bfd"
+      unitRef="U_CNY">996347000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_15239887-5c2a-461a-97ba-a2d066595111"
+      decimals="-6"
+      id="F_e847a8eb-a016-460b-9da3-abcf8515f2bd"
+      unitRef="U_CNY">996347000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_1ae1e3bf-e982-4733-aa91-fafb3b6fbaaa"
+      decimals="-6"
+      id="F_b8801ada-d6f3-4cc9-b9e8-9e2eb7b30818"
+      unitRef="U_CNY">490101000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_1ae1e3bf-e982-4733-aa91-fafb3b6fbaaa"
+      decimals="-6"
+      id="F_d80a4337-e296-43ab-8fcd-7eafdcfc06f2"
+      unitRef="U_CNY">490101000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_44415c66-9c70-45fb-80ae-54eed3aa9511"
+      unitRef="U_CNY">941168000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_7e02c75c-99f5-4d50-8765-b6b0842fb73d"
+      unitRef="U_CNY">941168000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_26dd7040-229f-4284-80ab-bde88a3480a0"
+      decimals="-6"
+      id="F_88d45dbc-7e0d-4f03-bb28-f3a454ce68d6"
+      unitRef="U_CNY">941168000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_2a1be343-a7f7-4869-81cb-94b6b1651e8f"
+      decimals="-6"
+      id="F_df66c96c-aad7-4092-a700-0934528dd75c"
+      unitRef="U_CNY">102598000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_300636f7-a66e-4f1f-b3c6-b7607ea40649"
+      decimals="-6"
+      id="F_d37a31b6-f761-4fae-b545-2d1a7c44007d"
+      unitRef="U_CNY">158132000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_300636f7-a66e-4f1f-b3c6-b7607ea40649"
+      decimals="-6"
+      id="F_fb1d76d8-7d02-4a05-8d46-e3ad0a61a84e"
+      unitRef="U_CNY">158132000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_361fc130-8a06-4907-b22c-acf76e1e313f"
+      decimals="-6"
+      id="F_37ef37f3-7ee6-42e0-bfa7-cccf208bf29b"
+      unitRef="U_CNY">254367000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_361fc130-8a06-4907-b22c-acf76e1e313f"
+      decimals="-6"
+      id="F_ce0bc8cf-e6ed-44bd-80a6-455b7e282acf"
+      unitRef="U_CNY">254367000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_5f9a8a06-a103-4631-b815-2db7eea3ad50"
+      decimals="-6"
+      id="F_40baccde-28fb-4bba-b013-e4a4d44c7834"
+      unitRef="U_CNY">118028000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_5f9a8a06-a103-4631-b815-2db7eea3ad50"
+      decimals="-6"
+      id="F_a0ecc248-185e-4524-8d04-75c674dcd6bb"
+      unitRef="U_CNY">118028000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_70f434b7-e6da-4678-a082-97593ecd771b"
+      decimals="-6"
+      id="F_396a2f9f-84a0-46d0-9705-3e89c8e07e11"
+      unitRef="U_CNY">508380000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_70f434b7-e6da-4678-a082-97593ecd771b"
+      decimals="-6"
+      id="F_7ab9273a-35d7-484a-ba01-59d44ddcbe68"
+      unitRef="U_CNY">508380000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_90acbeb6-a2de-4688-97d9-93f9f668cc03"
+      decimals="-6"
+      id="F_40a4281e-656d-4bd6-8b67-a549e449932b"
+      unitRef="U_CNY">338347000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_90acbeb6-a2de-4688-97d9-93f9f668cc03"
+      decimals="-6"
+      id="F_83651a55-e2e2-408f-93ca-53f0623c3063"
+      unitRef="U_CNY">338347000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_a0067fca-6984-4518-baf2-7b2018230187"
+      decimals="-6"
+      id="F_b4c6b443-244d-426e-9698-db9e9b242f86"
+      unitRef="U_CNY">144170000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_a6dbab57-801c-4690-b96a-ed00b70ed760"
+      decimals="-6"
+      id="F_88cd8042-fbe6-4b21-abfe-a6b1b2747329"
+      unitRef="U_CNY">132300000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_b28071fb-3afd-4d6e-9972-1e3650e493c2"
+      decimals="-6"
+      id="F_39cc00b8-36c2-4f73-b15d-8b02eab8801d"
+      unitRef="U_CNY">132300000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_b7b64878-9bae-4b40-b415-84535b1a1d66"
+      decimals="-6"
+      id="F_365783c7-15f6-416a-af55-b52f0095de56"
+      unitRef="U_CNY">554217000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_b7b64878-9bae-4b40-b415-84535b1a1d66"
+      decimals="-6"
+      id="F_49ee01d4-df58-4431-8665-5d0a1557ad82"
+      unitRef="U_CNY">554217000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_8c9a337f-ee19-4732-8a84-d8312bcfd515"
+      unitRef="U_CNY">1023670000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_ab0e7c82-3391-4d44-bafe-91682750cd14"
+      unitRef="U_CNY">1023670000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_daf77bc0-273c-42a5-939f-144dc3dd8ba1"
+      unitRef="U_USD">148401000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_bdc06c77-8884-4f62-88e4-3a439b51cc00"
+      decimals="-6"
+      id="F_fb68c738-4f0e-4281-80fd-0cfa8e4f9074"
+      unitRef="U_CNY">1023670000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_ccd49ecc-2a75-424c-b9d3-a02484b4cb60"
+      decimals="-6"
+      id="F_44d3e70c-348c-46e1-89b3-414c79b34743"
+      unitRef="U_CNY">102598000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_d4c62138-c72d-4cae-b779-9d013bab0039"
+      decimals="-6"
+      id="F_5c9aad66-1601-4abb-8a63-6a7b88287592"
+      unitRef="U_CNY">317539000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_d4c62138-c72d-4cae-b779-9d013bab0039"
+      decimals="-6"
+      id="F_ba94ca2e-90fb-4e8b-90a4-efec876c768f"
+      unitRef="U_CNY">317539000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_d7e8c3bc-30f3-4418-8e50-be2021a34fba"
+      decimals="-6"
+      id="F_04406653-903a-4e44-bc6b-ecdb4253d7d1"
+      unitRef="U_CNY">106374000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_d7e8c3bc-30f3-4418-8e50-be2021a34fba"
+      decimals="-6"
+      id="F_c9abfba6-35d9-4b6b-be6e-faf2b804ae03"
+      unitRef="U_CNY">106374000000</us-gaap:Revenues>
+<us-gaap:Revenues
+      contextRef="C_f451f434-7cbc-4a3d-8dc0-957054d3ebcc"
+      decimals="-6"
+      id="F_e5e6064b-f478-4f49-9e78-caa4e7f48adb"
+      unitRef="U_CNY">144170000000</us-gaap:Revenues>
+</xbrl>

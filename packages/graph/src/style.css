@@ -1,0 +1,756 @@
+/* The graph speaks the dashboard's palette, not its own.
+ *
+ * This block used to hardcode eighteen colours — which happened to be bloom.css's
+ * DARK values, copied across when the standalone page was folded in. They were
+ * indistinguishable from the real thing until you hit the theme toggle: the whole
+ * surface stayed plum-dark inside a light dashboard, because a literal cannot
+ * respond to `[data-theme]`. Worse, `--bg` and `--panel` SHADOWED the shell's own
+ * tokens for the entire subtree, so anything reaching for them got the graph's
+ * idea of the background rather than the app's.
+ *
+ * So: nothing is redeclared that the shell already defines. `--bg`, `--panel`,
+ * `--accent`, `--hairline-soft` and both fonts are inherited and now follow the
+ * theme. What remains is the graph's own vocabulary — names the d3 canvas reads
+ * (`roleColor`, `corrColor`, the key) that the shell has no equivalent for —
+ * aliased onto shell tokens wherever an equivalent exists.
+ *
+ * The five role hues are the exception and stay literal. They are categorical
+ * identity, chosen against the all-pairs separation floor, and a supplier must
+ * be the same teal on every surface that draws one. */
+.graph-surface {
+  /* recessed surface INSIDE a rail — the shell's --bg sits one step below
+     --panel in both themes, which is exactly the relation this wants */
+  --panel2: var(--panel-2);
+  --border: var(--hairline);
+  --text: var(--ink);
+  --muted: var(--ink-faint);
+
+  /* roles: categorical, deliberately literal */
+  --supplier: #0fa693;
+  --chip: #c47f17;
+  --buyer: #c13584;
+  --oem: #3f8cf3;
+  --mention: #6e7681;
+
+  /* the searched node's ring: maximum contrast against the card, either theme */
+  --root: var(--ink);
+  --pos: var(--up);
+  --neg: var(--down);
+  /* One step up the ramp from where the literal sat. `--ink-fainter` was the
+     closer match by name and too weak in practice: .link also carries
+     stroke-opacity .55, so the token is halved again before it reaches the
+     canvas, and 220 nodes' worth of edges disappeared into the panel. */
+  --edge: var(--ink-faint);
+  --edge-hi: var(--accent);
+}
+/* dropped (platform shell owns this): * */
+
+/* dropped (platform shell owns this): html, body */
+
+/* dropped (platform shell owns this): body */
+
+
+
+.graph-surface #app { display: flex; height: 100%; }
+
+.graph-surface #rail { width: 300px; min-width: 0; border-left: 1px solid var(--border); background: var(--panel);
+  padding: 14px 12px; overflow-y: auto; }
+.graph-surface #rail .zone { border: 0; background: none; padding: 0; }
+.graph-surface #rail:has(#zone-graph.collapsed) { width: 178px; }
+
+.graph-surface #sidebar {
+  width: 348px;
+  min-width: 348px;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.graph-surface .tag { font-size: 12px; color: var(--muted); margin: 0; }
+.graph-surface .tag strong { color: var(--accent); }
+
+.graph-surface #focus-ui { display: flex; flex-direction: column; gap: 8px; }
+.graph-surface #focus-bar { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.graph-surface #focus-bar[hidden] { display: none; }
+.graph-surface #focus-name { font-size: 13px; font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.graph-surface #focus-bar button {
+  font-size: 12px; padding: 5px 10px; border-radius: 3px; cursor: pointer;
+  background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+}
+.graph-surface #focus-bar button:hover { border-color: var(--accent); }
+.graph-surface #focus-bar button:disabled { opacity: .5; cursor: default; }
+.graph-surface #refresh-log {
+  font-family: var(--font-code);
+  font-size: 10.5px; color: var(--muted); background: var(--bg); border: 1px solid var(--border);
+  border-radius: 3px; padding: 6px 8px; line-height: 1.55; white-space: pre-wrap;
+  max-height: 180px; overflow-y: auto; overflow-wrap: anywhere;
+}
+.graph-surface #refresh-log[hidden] { display: none; }
+.graph-surface .mini {
+  font-size: 11px; padding: 4px 9px; border-radius: 3px; cursor: pointer; margin: 6px 0 2px;
+  background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+}
+.graph-surface .mini:hover { border-color: var(--accent); }
+
+.graph-surface #signals-sec[hidden] { display: none; }
+.graph-surface #signals-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.graph-surface #signals-head h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0; }
+.graph-surface #signals-list { max-height: 190px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; margin-top: 6px; }
+.graph-surface .sig { font-size: 11.5px; line-height: 1.4; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 6px 8px; }
+.graph-surface .sig.hot { border-left: 3px solid var(--chip); }
+.graph-surface .sig .top { display: flex; gap: 6px; align-items: baseline; color: var(--muted); }
+.graph-surface .sig .tk { font-weight: 700; color: var(--text); cursor: pointer; }
+.graph-surface .sig .tk:hover { color: var(--accent); }
+.graph-surface .sig .ch { font-size: 10px; border: 1px solid var(--border); border-radius: 999px; padding: 0 6px; }
+.graph-surface .sig a { color: var(--text); text-decoration: none; }
+.graph-surface .sig a:hover { color: var(--accent); text-decoration: underline; }
+.graph-surface .sig .upd { color: var(--accent); cursor: pointer; white-space: nowrap; }
+.graph-surface .sig .upd:hover { text-decoration: underline; }
+
+.graph-surface #meta {
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 10px 12px;
+}
+.graph-surface #meta b { color: var(--text); }
+
+.graph-surface .hint { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.graph-surface /* React sidebar island: sizing + zero-specificity resets (Tailwind preflight is off, .graph-surface so clear UA styles without out-ranking the utility classes) */
+#detail { height: 66vh; min-height: 460px; display: flex; flex-direction: column; }
+.graph-surface #detail > div { flex: 1; min-height: 0; }
+.graph-surface :where(#detail) button { border: 0; background: none; font: inherit; color: inherit; cursor: pointer; padding: 0; margin: 0; text-align: inherit; }
+.graph-surface :where(#detail) h2, .graph-surface :where(#detail) p { margin: 0; }
+.graph-surface :where(#detail) a { text-decoration: none; }
+
+.graph-surface #detail .card { animation: fade .2s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.graph-surface #detail h2 { font-size: 16px; margin: 0 0 2px; }
+.graph-surface #detail .sub { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+.graph-surface .role-pill {
+  display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  background: var(--panel2); color: var(--text); margin-left: 6px; vertical-align: middle;
+}
+
+.graph-surface .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+.graph-surface .stat {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 8px 10px;
+}
+.graph-surface .stat .k { font-size: 11px; color: var(--muted); }
+.graph-surface .stat .val { font-size: 16px; font-weight: 600; margin-top: 2px; }
+.graph-surface .stat .val.pos { color: var(--pos); }
+.graph-surface .stat .val.neg { color: var(--neg); }
+.graph-surface .stat .note { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+
+.graph-surface /* earnings intel sections */
+.sec { margin-top: 14px; }
+.graph-surface .sec h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; }
+.graph-surface .sec h3 .when { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.graph-surface .guide { font-size: 12px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 3px; padding: 7px 9px; line-height: 1.45; }
+.graph-surface .mover { display: flex; gap: 8px; align-items: baseline; font-size: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 6px 8px; margin-bottom: 5px; line-height: 1.4; }
+.graph-surface .mover .q { color: var(--muted); white-space: nowrap; min-width: 74px; }
+.graph-surface .badge { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.graph-surface .badge.pos { color: var(--pos); }
+.graph-surface .badge.neg { color: var(--neg); }
+.graph-surface .badge.flat { color: var(--muted); }
+.graph-surface .cat { display: flex; gap: 8px; font-size: 12px; padding: 4px 2px; line-height: 1.4; }
+.graph-surface .cat .d { color: var(--accent); white-space: nowrap; min-width: 82px; font-variant-numeric: tabular-nums; }
+.graph-surface .mention-note { font-size: 11px; color: var(--muted); margin: 4px 0 0; line-height: 1.4; }
+
+.graph-surface .rel-group { margin-top: 14px; }
+.graph-surface .rel-group h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; }
+.graph-surface .rel {
+  font-size: 13px; padding: 6px 8px; border-radius: 3px; background: var(--bg);
+  border: 1px solid var(--border); margin-bottom: 5px; cursor: pointer;
+  display: flex; justify-content: space-between; gap: 8px; align-items: baseline;
+}
+.graph-surface .rel:hover { border-color: var(--accent); }
+.graph-surface .rel .co { font-weight: 600; }
+.graph-surface .rel .note { color: var(--muted); font-size: 11px; text-align: right; }
+.graph-surface .rel .v { color: var(--supplier); }
+
+
+/* Rail sections in the shell's panel-header idiom: a 9px swatch, a 0.78rem
+   title, --head-h of vertical space. The surface used to draw these as bare
+   uppercase micro-labels, which is why the Graph read as a different product
+   from Competitors sitting one tab away. */
+.graph-surface .secc { --sec: var(--sw-a);
+  background: var(--panel-grad, var(--panel)); border-radius: var(--radius);
+  box-shadow: var(--shadow-soft); padding: 0 0 9px; margin-bottom: var(--gutter);
+  border-left: 2px solid color-mix(in srgb, var(--sec) 55%, transparent);
+  overflow: hidden; }
+.graph-surface .secc > summary { height: var(--head-h); padding: 0 11px;
+  background: color-mix(in srgb, var(--sec) 7%, transparent); }
+.graph-surface .secc > *:not(summary) { padding-left: 11px; padding-right: 11px; }
+.graph-surface .secc .ws-title {
+  font-size: 0.78rem; font-weight: 600; color: var(--ink);
+  text-transform: none; letter-spacing: 0; display: flex; align-items: center; gap: 8px;
+}
+.graph-surface .secc .ws-title::before {
+  content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--sec); flex: none;
+}
+/* Each rail section carries its own hue — the swatch, the accent bar and the
+   header tint all read from --sec — so eight otherwise-identical cards can be
+   told apart at a glance. The hues are the calendar-category tokens, already
+   tuned per theme, not new colors. */
+.graph-surface #formation     { --sec: var(--accent); }
+.graph-surface #saved-graphs  { --sec: var(--cat-market); }
+.graph-surface #companies-sec { --sec: var(--cat-econ); }
+.graph-surface #connections   { --sec: var(--cat-earnings); }
+.graph-surface #dataset-sec   { --sec: var(--cat-energy); }
+.graph-surface #corr-sec      { --sec: var(--cat-fed); }
+.graph-surface #signals-sec   { --sec: var(--sw-a); }
+.graph-surface #about-sec     { --sec: var(--ink-fainter); }
+
+.graph-surface /* collapsible zone sections */
+.secc summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.graph-surface .secc summary::-webkit-details-marker { display: none; }
+.graph-surface .secc summary::after { content: "▸"; font-size: 10px; color: var(--muted); }
+.graph-surface .secc[open] summary::after { content: "▾"; }
+.graph-surface .secc > *:not(summary) { margin-top: 8px; }
+.graph-surface #signals-body .mini { margin: 0 0 6px; }
+
+.graph-surface /* formation tracker */
+#formation[hidden] { display: none; }
+.graph-surface .fm-head { display: flex; justify-content: space-between; align-items: baseline; }
+.graph-surface #fm-pct { font-size: 12px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.graph-surface #fm-pct.done { color: var(--pos); }
+.graph-surface .fm-bar { height: 6px; border-radius: 999px; background: var(--bg); border: 1px solid var(--border); overflow: hidden; margin: 5px 0; }
+.graph-surface #fm-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width .6s ease; }
+.graph-surface #fm-fill.done { background: var(--pos); }
+.graph-surface .fm-detail { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+.graph-surface /* workspace: saved relationship sets */
+.ws-title { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; }
+.graph-surface .ws-empty { font-size: 11px; color: var(--muted); line-height: 1.4; }
+.graph-surface .ws-row { display: flex; align-items: center; gap: 7px; padding: 4px 6px; border-radius: 3px; background: var(--bg); border: 1px solid var(--border); margin-bottom: 4px; font-size: 12px; }
+.graph-surface .ws-row.off { opacity: .55; }
+.graph-surface .ws-row input { accent-color: var(--accent); cursor: pointer; }
+.graph-surface .ws-name { flex: 1; min-width: 0; font-weight: 700; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.graph-surface .ws-name:hover { color: var(--accent); }
+.graph-surface .ws-name small { font-weight: 400; color: var(--muted); }
+.graph-surface .ws-x { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 11px; padding: 0 2px; }
+.graph-surface .ws-x:hover { color: var(--neg); }
+.graph-surface .ws-row.cur { border-style: dashed; }
+.graph-surface .ws-save { background: none; border: 0; color: var(--chip); cursor: pointer; font-size: 13px; padding: 0 1px; line-height: 1; }
+.graph-surface .ws-save:hover { color: var(--accent); }
+/* Connections list: one group heading per relationship, matching the on-canvas
+   hue so the rail and the graph read as the same classification. */
+.graph-surface .conn-head { display: flex; align-items: center; gap: 6px; margin: 8px 0 4px; font-size: 10px;
+  font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.graph-surface .conn-head:first-child { margin-top: 0; }
+.graph-surface .conn-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+/* A company reached by more than one visible graph — the seam the clusters
+   merge through, so it is called out in both lists. */
+.graph-surface .ws-shared { color: var(--accent); }
+.graph-surface .ws-row.off { opacity: .45; }
+
+/* ---- loading overlay ----------------------------------------------------
+   Centred over the canvas while a company is being found, because until that
+   finishes there is nothing on the canvas to look at anyway. `.corner` demotes
+   it to a card in the bottom-left for the research leg, which runs after the
+   draft is already drawn and must not block it. */
+/* In the left sidebar, under the company panel — not over the canvas. The
+   research leg runs for minutes after the draft is drawn, and an overlay that
+   covers the graph for all of it hides the thing it is reporting on. */
+.graph-surface #graph-loading { display: block; flex: none; }
+.graph-surface #graph-loading[hidden] { display: none; }
+.graph-surface .gl-card {
+  padding: 12px 13px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+  border-left: 2px solid var(--accent);
+}
+.graph-surface #graph-loading.failed .gl-card { border-left-color: var(--neg); }
+.graph-surface .gl-head { display: flex; align-items: center; gap: 9px; }
+.graph-surface .gl-title { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; min-width: 0; }
+.graph-surface .gl-elapsed { font-family: var(--font-code); font-size: 10.5px; color: var(--muted); }
+.graph-surface .gl-spinner {
+  width: 13px; height: 13px; flex: none; border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-top-color: var(--accent); animation: gl-spin .8s linear infinite;
+}
+@keyframes gl-spin { to { transform: rotate(360deg); } }
+.graph-surface .gl-steps { list-style: none; margin: 11px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.graph-surface .gl-step { display: flex; align-items: baseline; gap: 8px; font-size: 11.5px; color: var(--muted); }
+.graph-surface .gl-step.done { color: var(--pos); }
+.graph-surface .gl-step.active { color: var(--text); font-weight: 600; }
+.graph-surface .gl-step.todo { opacity: .55; }
+.graph-surface .gl-mark { width: 11px; flex: none; text-align: center; font-size: 10px; }
+.graph-surface .gl-dot {
+  display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); animation: gl-pulse 1.1s ease-in-out infinite;
+}
+@keyframes gl-pulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+.graph-surface .gl-log {
+  font-family: var(--font-code); font-size: 10px; line-height: 1.5; color: var(--muted);
+  background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+  margin: 11px 0 0; padding: 6px 8px; max-height: 132px; overflow-y: auto;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.graph-surface .gl-log[hidden] { display: none; }
+.graph-surface .gl-foot:empty { display: none; }
+.graph-surface #graph-loading.failed .gl-spinner { display: none; }
+.graph-surface #graph-loading.failed .gl-title { color: var(--neg); }
+@media (prefers-reduced-motion: reduce) {
+  .graph-surface .gl-spinner, .graph-surface .gl-dot { animation: none; }
+}
+
+
+/* ---- canvas / Company-tabs divergence marker --------------------------- */
+.graph-surface .gr-diverged {
+  margin-top: 10px; padding: 8px 9px; border-radius: 4px;
+  background: color-mix(in srgb, var(--chip) 10%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--chip) 38%, transparent);
+}
+.graph-surface .gd-row { display: flex; align-items: flex-start; gap: 7px; }
+.graph-surface .gd-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--chip);
+  flex: none; margin-top: 5px;
+}
+.graph-surface .gd-text { font-size: 11.5px; line-height: 1.45; color: var(--text); }
+.graph-surface .gd-text b { font-weight: 700; }
+.graph-surface .gd-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.graph-surface .gd-actions .mini { margin: 4px 0 0; }
+.graph-surface .gr-synced {
+  margin: 8px 0 0; font-size: 11px; color: var(--muted);
+  display: flex; align-items: baseline; gap: 5px;
+}
+.graph-surface .gs-tick { color: var(--pos); font-size: 10px; }
+
+/* ---- companies list ----------------------------------------------------- */
+.graph-surface .ws-sub { margin-left: auto; font-size: 10px; color: var(--muted); font-weight: 400; }
+.graph-surface #companies-list { max-height: 320px; overflow-y: auto; }
+.graph-surface .cl-row { align-items: flex-start; }
+.graph-surface .cl-row.cl-is-root { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.graph-surface .cl-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; margin-top: 5px; }
+.graph-surface .cl-root {
+  font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 2px; padding: 0 3px; flex: none; margin-top: 2px;
+}
+.graph-surface .cl-note { display: block; color: var(--muted); font-weight: 400; }
+.graph-surface .ws-x[data-ws-root]:hover { color: var(--accent); }
+
+.graph-surface /* searched roots: light fill + white ring — distinct by lightness, .graph-surface works in grayscale */
+.node.root .card { stroke-width: 2.2px; }
+.graph-surface .node.root text { fill: var(--ink); }
+
+.graph-surface /* empty-canvas hint */
+#empty-hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 3; pointer-events: none; }
+.graph-surface #empty-hint[hidden] { display: none; }
+.graph-surface #empty-hint p { max-width: 380px; text-align: center; font-size: 13px; line-height: 1.6; color: var(--muted); }
+
+.graph-surface /* 5.1 labeled zones: GRAPH (collapsible) above COMPANY */
+.zone { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; }
+.graph-surface .zone-head { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; cursor: pointer; padding: 0; color: inherit; font: inherit; text-align: left; }
+.graph-surface .zone-head.static { cursor: default; }
+.graph-surface .zone-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+.graph-surface .zone-title.graph { color: var(--accent); }
+.graph-surface .zone-title.company { color: var(--supplier); }
+.graph-surface .zone-sub { flex: 1; font-size: 10px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
+.graph-surface .zone-caret { font-size: 10px; color: var(--muted); }
+.graph-surface .zone-body { display: flex; flex-direction: column; gap: 14px; }
+.graph-surface #zone-graph.collapsed .zone-body { display: none; }
+.graph-surface #zone-company.collapsed #detail { display: none; }
+.graph-surface #sidebar .zone#zone-company { border: 0; background: none; padding: 0; }
+.graph-surface .zone-actions { display: flex; gap: 8px; }
+
+.graph-surface footer { font-size: 11px; color: var(--muted); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; margin: 0; }
+.graph-surface footer .v { color: var(--supplier); }
+.graph-surface footer .src { opacity: .7; }
+
+.graph-surface #graph { flex: 1; position: relative; }
+
+/* ---- Minimizable canvas, expandable rail --------------------------------
+   Two persisted layout toggles. ⊟ collapses the canvas to a 44px strip so the
+   rail's sections take the full width; the rail's own Expand widens it while
+   the canvas stays. Graph.jsx re-fires the window resize event on each flip,
+   which is the path main.js recenters the simulation on. */
+.graph-surface .gr-canvas-toggle { position: absolute; top: 12px; left: 12px; z-index: 6; margin: 0; }
+.graph-surface[data-canvas-min] #graph { flex: 0 0 44px; min-width: 44px; }
+.graph-surface[data-canvas-min] #graph > *:not(.gr-canvas-toggle):not(#corr-overlay) { display: none; }
+.graph-surface[data-canvas-min] .gr-canvas-toggle {
+  left: 50%; transform: translateX(-50%); writing-mode: vertical-rl; padding: 9px 4px;
+}
+.graph-surface[data-canvas-min] #rail { flex: 1; width: auto; }
+/* The correlation grid normally fills the canvas; with the canvas minimized
+   it takes the viewport instead of a 44px strip. */
+.graph-surface[data-canvas-min] #corr-overlay {
+  position: fixed; inset: calc(var(--topbar-h) + 34px) 12px 12px 68px;
+}
+
+/* The left sidebar collapses the same way the canvas does — to a 44px strip
+   with a vertical restore button — so the canvas (or, with both minimized,
+   the rail) takes the width. */
+.graph-surface .gr-sidebar-bar { display: flex; justify-content: flex-end; margin: -6px 0 -10px; }
+.graph-surface .gr-sidebar-bar .mini { margin: 0; }
+.graph-surface[data-sidebar-min] #sidebar {
+  flex: 0 0 44px; width: 44px; min-width: 44px; padding: 12px 0; gap: 0;
+}
+.graph-surface[data-sidebar-min] #sidebar > *:not(.gr-sidebar-bar) { display: none; }
+.graph-surface[data-sidebar-min] .gr-sidebar-bar { justify-content: center; margin: 0; }
+.graph-surface[data-sidebar-min] .gr-sidebar-bar .mini { writing-mode: vertical-rl; padding: 9px 4px; }
+
+.graph-surface .gr-railbar { display: flex; justify-content: flex-end; }
+.graph-surface .gr-railbar .mini { margin: 0 0 8px; }
+.graph-surface[data-canvas-min] .gr-railbar { display: none; }
+.graph-surface[data-rail-wide] #rail { width: 580px; }
+
+/* With the extra width the sections sit beside each other rather than in one
+   squeezed column. Item margins go — the grid gap is the rhythm here. */
+.graph-surface[data-rail-wide] #graph-zone-body,
+.graph-surface[data-canvas-min] #graph-zone-body {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 10px; align-items: start;
+}
+.graph-surface[data-rail-wide] #graph-zone-body .secc,
+.graph-surface[data-canvas-min] #graph-zone-body .secc { margin-bottom: 0; }
+
+.graph-surface /* on-canvas key */
+#graph-key {
+  position: absolute; top: 12px; right: 12px; z-index: 5; width: 215px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  border: 1px solid var(--border); border-radius: 4px; font-size: 11px;
+  backdrop-filter: blur(4px);
+}
+/* The key's header borrows .pnl-head's proportions — same 30px --head-h, same
+   9px swatch, same 0.78rem title — so a floating card on this canvas reads as
+   the same kind of object as a panel header anywhere else on the dashboard. */
+.graph-surface .gk-head { display: flex; justify-content: space-between; align-items: center;
+  height: var(--head-h); padding: 0 10px; gap: 8px;
+  font-weight: 600; font-size: 0.78rem; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.graph-surface .gk-head > span:first-child::before {
+  content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 2px;
+  background: var(--sw-a); margin-right: 8px; vertical-align: baseline;
+}
+.graph-surface .gk-head button { background: none; border: 1px solid var(--border); border-radius: 5px; color: var(--muted);
+  font-size: 12px; line-height: 1; padding: 1px 6px; cursor: pointer; }
+.graph-surface .gk-head button:hover { border-color: var(--accent); color: var(--text); }
+.graph-surface .gk-body { padding: 0 10px 9px; display: flex; flex-direction: column; gap: 4px; }
+.graph-surface #graph-key.collapsed .gk-body { display: none; }
+.graph-surface .gk-row { display: flex; align-items: center; gap: 7px; color: var(--text); line-height: 1.35; }
+.graph-surface .gk-row .dot { flex: 0 0 10px; width: 10px; height: 10px; border-radius: 50%; }
+.graph-surface .gk-row svg { flex: 0 0 26px; height: 10px; overflow: visible; }
+.graph-surface .gk-hr { border-top: 1px solid var(--border); margin: 3px 0; }
+.graph-surface .gk-note { color: var(--muted); font-size: 10px; line-height: 1.35; }
+/* Section headings inside the key. Same micro-label the rail's own section
+   headers use, so "Relationship" here and "Companies" there are one idiom. */
+.graph-surface .gk-sec {
+  font-size: 0.52rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em;
+  color: var(--ink-fainter); margin: 7px 0 1px;
+}
+.graph-surface .gk-sec:first-child { margin-top: 2px; }
+.graph-surface svg { width: 100%; height: 100%; display: block; cursor: grab; }
+.graph-surface svg:active { cursor: grabbing; }
+
+/* --corr is set per link from the pair's return correlation; it falls back to
+   the flat edge colour when the pair has no usable price history. Written as a
+   custom property rather than an inline stroke so .link.hi, .link.mention and
+   .link.new still win on specificity and keep their states. */
+.graph-surface .link { stroke: var(--corr, var(--edge)); stroke-opacity: .55; }
+.graph-surface .link.has-corr { stroke-opacity: .8; }
+.graph-surface .link.unverified { stroke-dasharray: 3 3; stroke-opacity: .35; }
+.graph-surface .link.mention { stroke: var(--mention); stroke-dasharray: 2 4; stroke-opacity: .45; }
+.graph-surface .link.hi { stroke: var(--edge-hi); stroke-opacity: .9; }
+
+.graph-surface .node.mention-only .tick { fill: var(--muted); font-weight: 600; font-size: 9px; }
+.graph-surface /* uncertain: drafts & unverified — dotted, .graph-surface labeled with ? */
+.node.draft .card { stroke-dasharray: 4 3; stroke-width: 1.8px; }
+.graph-surface .link.mention.draft { stroke-dasharray: 1 4; stroke-linecap: round; stroke-opacity: .4; }
+
+.graph-surface /* certain but new (≤7d, .graph-surface per ledger.json): pulsing accent halo + bright edge */
+.node .halo { fill: none; stroke: var(--accent); stroke-width: 2px; opacity: 0; pointer-events: none; }
+.graph-surface .node.new .halo { opacity: .9; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+.graph-surface .link.new { stroke: var(--accent); stroke-opacity: .85; stroke-width: 2.4px; }
+
+.graph-surface .dot.halo-demo { background: transparent; border: 2px solid var(--accent); }
+.graph-surface .dot.dash-demo { background: transparent; border: 1.5px dashed var(--muted); }
+
+.graph-surface .node.focus-center .card { stroke: var(--ink) !important; stroke-width: 2.6px; }
+.graph-surface .node.focus-center text { font-size: 13px; }
+
+.graph-surface .node .card { fill: var(--panel2); stroke-width: 1.4px; cursor: pointer; transition: stroke .15s; }
+.graph-surface .node .bar { pointer-events: none; }
+.graph-surface .node.sel .card { stroke: var(--ink) !important; stroke-width: 2.4px; }
+.graph-surface .node.dim { opacity: .2; }
+.graph-surface .node text { pointer-events: none; }
+.graph-surface .node .tick { fill: var(--text); font-size: 10.5px; font-weight: 700; }
+.graph-surface .node .nbadge { font-size: 9px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.graph-surface .link.dim { opacity: .06; }
+
+.graph-surface /* Bloom radius inside the React panel */
+#detail :is(.rounded, .rounded-md, .rounded-lg, .rounded-xl) { border-radius: var(--radius-sm) !important; }
+.graph-surface #detail { font-family: var(--font-ui); }
+
+/* ------------------------------------------------------------------ */
+/*  Platform integration                                               */
+/*                                                                      */
+/*  Everything above came from the standalone company-supply-graph page,*/
+/*  where the graph owned the whole viewport. Inside the platform it is */
+/*  one surface in `.workspace`, so it fills its parent instead of the  */
+/*  window, and it re-declares the box model the dropped `*` rule used  */
+/*  to provide.                                                         */
+/* ------------------------------------------------------------------ */
+
+.graph-surface,
+.graph-surface *,
+.graph-surface *::before,
+.graph-surface *::after { box-sizing: border-box; }
+
+.graph-surface {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.graph-surface #app { flex: 1; min-height: 0; height: auto; }
+
+
+.graph-error {
+  margin: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--neg);
+  background: var(--panel);
+  font-size: 13px;
+}
+.graph-error p { margin: 6px 0 0; color: var(--muted); }
+.graph-error code {
+  font-family: var(--font-code);
+  background: var(--panel2);
+  padding: 1px 5px;
+  margin: 0 2px;
+}
+
+/* ============================================================ *
+ *  CORRELATION GRID — every company in the graph against every
+ *  other. Lives over the canvas because 34 columns will not fit
+ *  the 300px rail.
+ * ============================================================ */
+.graph-surface #corr-overlay {
+  position: absolute; inset: 12px; z-index: 30;
+  display: flex; flex-direction: column;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: 0 18px 50px color-mix(in srgb, var(--ink) 26%, transparent);
+}
+.graph-surface #corr-overlay[hidden] { display: none; }
+.graph-surface .co-head {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 10px 12px; border-bottom: 1px solid var(--border);
+}
+.graph-surface .co-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.graph-surface .co-sub { flex: 1; font-size: 11px; color: var(--muted); }
+.graph-surface .co-scroll { flex: 1; overflow: auto; padding: 8px 12px; }
+.graph-surface .co-foot {
+  padding: 8px 12px; border-top: 1px solid var(--border);
+  font-size: 10px; line-height: 1.5; color: var(--muted);
+}
+
+.graph-surface table.co-tbl { border-collapse: separate; border-spacing: 0; font-size: 10px; }
+/* Both headers stay put: on a 34-square grid the row you are reading is off
+   the top and the name you are reading is off the left within a few columns. */
+.graph-surface table.co-tbl thead th {
+  position: sticky; top: 0; z-index: 2; background: var(--panel);
+  padding: 2px 3px; font-weight: 700; color: var(--muted);
+  writing-mode: vertical-rl; text-orientation: mixed; height: 52px;
+}
+.graph-surface table.co-tbl tbody th {
+  position: sticky; left: 0; z-index: 1; background: var(--panel);
+  padding: 0 6px 0 2px; text-align: right; font-weight: 700; color: var(--text);
+  font-family: var(--font-code, ui-monospace, monospace);
+}
+.graph-surface table.co-tbl thead th.co-corner { left: 0; z-index: 3; writing-mode: horizontal-tb; }
+.graph-surface table.co-tbl td {
+  width: 22px; height: 20px; text-align: center; color: var(--ink);
+  font-variant-numeric: tabular-nums; border-radius: 2px;
+}
+.graph-surface table.co-tbl td.co-self { color: var(--muted); background: transparent; }
+.graph-surface table.co-tbl td.co-na { color: var(--muted); background: transparent; }
+/* The diagonal block a supply chain forms is the thing worth seeing, so the
+   ramp is anchored at 0 and only positive correlation gains weight. */
+.graph-surface table.co-tbl tr:hover td { outline: 1px solid var(--border); }
+.graph-surface .co-legend { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.graph-surface .co-legend i { width: 16px; height: 10px; display: inline-block; border-radius: 2px; }
+
+
+/* ============================================================ *
+ *  FLOW DIRECTION — dashes travel along a supply link from the
+ *  supplier to the customer, i.e. the way the goods go. Cash
+ *  goes the other way; the arrowhead already fixes the reading.
+ * ============================================================ */
+@keyframes graph-flow { to { stroke-dashoffset: -24; } }
+
+.graph-surface .link.flowing {
+  stroke-dasharray: 6 6;
+  animation: graph-flow 1.1s linear infinite;
+}
+/* Faster where more of the supplier's revenue runs through the link: the
+   variable is set per edge from the disclosed share. */
+.graph-surface .link.flowing.fast { animation-duration: .55s; }
+
+/* Respect the OS setting. A permanently animating canvas is a genuine
+   accessibility problem, and the arrowhead still carries the direction. */
+@media (prefers-reduced-motion: reduce) {
+  .graph-surface .link.flowing { animation: none; stroke-dasharray: none; }
+}
+
+/* The chosen look — Tokens won the five-way comparison: the surface reads the
+   shell's palette and follows the theme toggle, skeleton untouched. The other
+   four looks and the switch were deleted; see git history for what they argued. */
+.graph-surface #app { background: var(--bg); }
+
+/* ============================================================================
+   THE SIDEBAR ISLAND'S PALETTE
+   ==========================================================================
+
+   `sidebar.jsx` is the one React component inside the d3 surface, and it was
+   written in Tailwind colour literals — 207 of them, every single one picked
+   against a dark ground: text-white, bg-black/30, border-slate-700,
+   text-emerald-300. That was invisible while the surface hardcoded its own dark
+   palette, because the assumption was true. The moment the surface started
+   following the theme it stopped being true, and the whole company panel went
+   near-white text on a near-white card.
+
+   So the literals are gone and these are what replaced them. They are named for
+   what they MEAN, not what they look like, which is the property that made the
+   old ones impossible to theme: `text-emerald-300` says "this green", and
+   `gr-pos` says "this is the good direction" — and only the second one can be
+   answered differently in light and dark.
+
+   Scoped to .graph-surface so nothing here can reach another surface, and every
+   value is a token, so a palette change carries.
+   ========================================================================= */
+
+/* --- neutrals: the four-step ink ramp the rest of the dashboard uses ------ */
+.graph-surface .gr-ink { color: var(--ink); }
+.graph-surface .gr-soft { color: var(--ink-soft); }
+.graph-surface .gr-faint { color: var(--ink-faint); }
+.graph-surface .gr-fainter { color: var(--ink-fainter); }
+/* Ink for sitting ON a filled accent chip, where --ink would vanish. */
+.graph-surface .gr-on-fill { color: var(--accent-ink); }
+
+.graph-surface .gr-recess { background: var(--bg); }
+.graph-surface .gr-raised { background: var(--panel-2); }
+
+.graph-surface .gr-line { border-color: var(--hairline); }
+
+/* --- direction: the reserved pair, never used for anything else ----------- */
+.graph-surface .gr-pos { color: var(--up); }
+.graph-surface .gr-neg { color: var(--down); }
+/* A weaker reading of the same claim — "positive but only just". Mixed toward
+   the ink rather than made transparent, so it stays legible on either ground. */
+.graph-surface .gr-pos-soft { color: color-mix(in oklab, var(--up) 72%, var(--ink)); }
+.graph-surface .gr-bar-pos { background: var(--up); }
+.graph-surface .gr-bar-neg { background: var(--down); }
+.graph-surface .gr-line-pos { border-color: color-mix(in oklab, var(--up) 45%, var(--hairline)); }
+.graph-surface .gr-line-neg { border-color: color-mix(in oklab, var(--down) 50%, var(--hairline)); }
+.graph-surface .gr-fill-pos { background: color-mix(in oklab, var(--up) 12%, transparent); }
+.graph-surface .gr-fill-neg { background: color-mix(in oklab, var(--down) 12%, transparent); }
+/* The pulsing "earnings imminent" tag: a solid plate, so its text inverts. */
+.graph-surface .gr-tag-neg { background: var(--down); color: var(--accent-ink); }
+
+/* --- the two graph roles that double as UI hues --------------------------- */
+/* amber = a soft warning, and the star on "save graph". --chip is the graph's
+   own amber, already in the key, so the sidebar and the canvas agree. */
+.graph-surface .gr-warn { color: var(--chip); }
+.graph-surface .gr-line-warn { border-color: color-mix(in oklab, var(--chip) 50%, var(--hairline)); }
+.graph-surface .gr-fill-warn { background: color-mix(in oklab, var(--chip) 12%, transparent); }
+.graph-surface .gr-tag-warn { background: var(--chip); color: var(--accent-ink); }
+.graph-surface .gr-dot-warn { background: var(--chip); }
+
+/* blue = market data and things you can click into. --oem, likewise. */
+.graph-surface .gr-info { color: var(--oem); }
+.graph-surface .gr-line-info { border-color: color-mix(in oklab, var(--oem) 50%, var(--hairline)); }
+.graph-surface .gr-fill-info { background: color-mix(in oklab, var(--oem) 12%, transparent); }
+.graph-surface .gr-bar-info { background: color-mix(in oklab, var(--oem) 70%, transparent); }
+
+/* A pulled quote is neither good nor bad nor a role — it is emphasis. */
+.graph-surface .gr-line-quote { border-color: var(--accent); }
+
+/* --- states -------------------------------------------------------------- */
+.graph-surface .gr-hov-line:hover { border-color: var(--accent); }
+.graph-surface .gr-hov-ink:hover { color: var(--ink); }
+.graph-surface .gr-hov-soft:hover { color: var(--ink-soft); }
+.graph-surface .gr-hov-accent:hover { color: var(--accent); }
+.graph-surface .gr-hov-raised:hover { background: var(--panel-2); }
+/* Was `ring-1 ring-sky-400`. An inset shadow rather than a real ring, so
+   selecting a row cannot change its height by two pixels. */
+.graph-surface .gr-ring { box-shadow: inset 0 0 0 1px var(--accent); }
+
+/* ---- the metric overlay -------------------------------------------------- */
+/* Ramp tokens, scoped to this surface like everything else here. These are the
+   SAME hexes main.js paints nodes with — declared once so the legend's gradient
+   and the node colours cannot drift apart. Both poles were run through the
+   palette validator in each mode (lightness band, chroma floor, CVD separation,
+   contrast on surface); the dark steps are their own, not the light ones
+   brightened, because the light blue sits outside dark's lightness band. */
+.graph-surface {
+  --gr-ramp-s1: #86b6ef; --gr-ramp-s3: #2a78d6; --gr-ramp-s5: #104281;
+  --gr-ramp-neg: #e34948; --gr-ramp-mid: #f0efec; --gr-ramp-pos: #2a78d6;
+}
+:root[data-theme="dark"] .graph-surface {
+  --gr-ramp-s1: #184f95; --gr-ramp-s3: #3987e5; --gr-ramp-s5: #9ec5f4;
+  --gr-ramp-neg: #e66767; --gr-ramp-mid: #383835; --gr-ramp-pos: #3987e5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .graph-surface {
+    --gr-ramp-s1: #184f95; --gr-ramp-s3: #3987e5; --gr-ramp-s5: #9ec5f4;
+    --gr-ramp-neg: #e66767; --gr-ramp-mid: #383835; --gr-ramp-pos: #3987e5;
+  }
+}
+
+.gr-metric-pick {
+  display: inline-flex; align-items: center; gap: 6px; margin-left: auto;
+  font-size: 10px; color: var(--ink-fainter);
+}
+.gr-metric-pick-l { text-transform: uppercase; letter-spacing: 0.09em; }
+.gr-metric-pick select {
+  font: inherit; font-size: 11px; color: var(--ink);
+  background: var(--panel); border: 1px solid var(--hairline);
+  border-radius: var(--radius); padding: 3px 6px; max-width: 210px;
+}
+.gr-metric-pick select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.gr-metric-busy { color: var(--ink-fainter); }
+
+.gr-legend {
+  position: absolute; left: 12px; bottom: 12px; z-index: 4;
+  max-width: 340px; padding: 9px 11px;
+  background: var(--panel); border: 1px solid var(--hairline);
+  border-radius: var(--radius); box-shadow: 0 2px 12px rgb(0 0 0 / 0.18);
+  font-size: 10px; line-height: 1.5; color: var(--ink-faint);
+}
+.gr-legend.is-note { color: var(--ink-soft); }
+.gr-legend-h { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+.gr-legend-h b { font-size: 11.5px; color: var(--ink); }
+.gr-legend-basis { color: var(--ink-fainter); }
+
+.gr-legend-scale { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+/* A 2px surface ring keeps the bar from bleeding into the panel it sits on. */
+.gr-legend-bar {
+  flex: 1 1 auto; height: 9px; border-radius: 3px;
+  border: 1px solid var(--hairline);
+}
+.gr-legend-end { font-variant-numeric: var(--nums); color: var(--ink); white-space: nowrap; }
+
+.gr-legend-note { margin-bottom: 5px; }
+.gr-legend-cov { padding-top: 5px; border-top: 1px solid var(--hairline-soft); }
+.gr-legend-cov b { color: var(--ink); font-variant-numeric: var(--nums); }
+.gr-legend-cov em { font-style: normal; color: var(--ink); }
+
+#graph { position: relative; }
+.graph-surface .gk-overlay { color: var(--ink-soft); max-width: 190px; line-height: 1.45; }
+.graph-surface .gk-overlay b { color: var(--ink); }

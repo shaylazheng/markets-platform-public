@@ -1,0 +1,484 @@
+/* Industry surface.
+ *
+ * Declares NO :root block and redefines NO tokens — bloom.css stays the
+ * authority on the palette, the same contract summary.css and the rest of the
+ * Company group honour. Every colour here is a var().
+ *
+ * The scaffolding (surface flex, 320px sticky rail column, internally
+ * scrolling main) mirrors .sm-* so the Company group's surfaces put the rail
+ * in exactly the same place; the src buttons and the rail inspector are the
+ * shell's .si-* system, styled once in base.css.
+ */
+
+.ind-surface {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gutter);
+  padding: var(--gutter);
+  /* The SURFACE scrolls with the rail sticky inside it — same fix as
+     .sm-surface: `overflow: hidden` here plus `overflow-y: auto` on an
+     unstretched .ind-main meant nothing scrolled, content past the fold was
+     clipped, and a focus jump could cut off the top irrecoverably. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.ind-surface::-webkit-scrollbar { width: 9px; }
+.ind-surface::-webkit-scrollbar-track { background: transparent; }
+.ind-surface::-webkit-scrollbar-thumb {
+  background: var(--hairline); border-radius: 999px; border: 2px solid var(--bg);
+}
+
+.ind-railcol {
+  flex: 0 0 320px;
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  max-height: calc(100vh - var(--topbar-h) - var(--gutter) * 2);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+.ind-railcol > * { flex: 0 0 auto; }
+
+.ind-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+
+/* Two panels abreast; each its own height, so a short one never stretches to
+   an empty box that reads as content that failed to load. */
+.ind-band { display: flex; gap: var(--gutter); flex: 0 0 auto; align-items: flex-start; }
+.ind-band > .pnl { flex: 1 1 50%; min-width: 0; align-self: flex-start; }
+@media (max-width: 1400px) {
+  .ind-band { flex-direction: column; }
+  .ind-band > .pnl { flex: 1 1 auto; width: 100%; }
+}
+
+/* ---- the classification panel ------------------------------------------- */
+
+.ind-lede {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  line-height: 1.5;
+}
+.ind-desc { font-size: 1.05rem; color: var(--ink); }
+.ind-code, .ind-div {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.ind-code { font-family: var(--font-code); font-variant-numeric: var(--nums); }
+.ind-filings {
+  font-size: 0.68rem;
+  color: var(--ink-fainter);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+}
+.ind-filings:hover { color: var(--accent); border-color: var(--accent); }
+
+/* The broad-to-narrow ladder. An <ol>, because the order IS the content:
+   each rung is a strictly narrower scope than the one above it. */
+.ind-ladder {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ind-ladder li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding-left: calc(var(--ladder-step, 0) * 1px);
+}
+/* The indent is literal: each rung steps right, and the last carries the
+   hairline of the ones above it so the eye reads containment, not a list. */
+.ind-ladder li:nth-child(2) { --ladder-step: 14; }
+.ind-ladder li:nth-child(3) { --ladder-step: 28; }
+.ind-ladder li:nth-child(4) { --ladder-step: 42; }
+.ind-ladder li.is-code:first-child { --ladder-step: 0; }
+.ind-rung-k {
+  flex: 0 0 auto;
+  font-family: var(--font-code);
+  font-variant-numeric: var(--nums);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.ind-rung-v { font-size: 0.78rem; color: var(--ink-soft); min-width: 0; }
+.ind-ladder .is-code .ind-rung-v { color: var(--ink); }
+.ind-office {
+  display: block;
+  font-size: 0.66rem;
+  color: var(--ink-fainter);
+}
+
+.ind-headnote { font-size: 0.66rem; color: var(--ink-fainter); }
+.ind-foot {
+  margin: 10px 0 0;
+  font-size: 0.68rem;
+  line-height: 1.55;
+  color: var(--ink-fainter);
+}
+.ind-none { margin: 0; font-size: 0.74rem; color: var(--ink-faint); }
+.ind-empty { font-size: 0.78rem; line-height: 1.6; color: var(--ink-soft); max-width: 52ch; }
+.ind-empty p { margin: 0 0 8px; }
+
+/* ---- absences ------------------------------------------------------------ *
+ * Deliberately NOT styled as a warning, same reasoning as .sm-absent: these
+ * are ordinary facts about the boundary of what is known. */
+.ind-absent { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* Collapsed, the summary line still NAMES every caveat — folded, not hidden. */
+.ind-absentfold summary {
+  cursor: pointer;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  list-style-position: outside;
+}
+.ind-absentfold summary:hover { color: var(--ink); }
+.ind-absentfold[open] summary { margin-bottom: 10px; }
+
+/* ---- ƒ: a value computed here by a stated formula ------------------------- *
+ *
+ * The marker for a figure the standard filed read could not give, computed
+ * instead by a deterministic formula (derive.js). Dotted underline + the ƒ
+ * superscript: visible at a glance, never mistakable for a filed number, and
+ * the title carries the formula verbatim. */
+.ind-drv { border-bottom: 1px dotted var(--accent); cursor: help; }
+.ind-drv sup {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.68em;
+  line-height: 0;
+  margin-left: 1px;
+}
+.ind-absent .ind-row { display: flex; flex-direction: column; gap: 2px; }
+.ind-absent dt {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.ind-absent dd { margin: 0; font-size: 0.72rem; line-height: 1.55; color: var(--ink-fainter); }
+
+/* ---- the member table ---------------------------------------------------- */
+
+.ind-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+.ind-table th {
+  text-align: left;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink-faint);
+  padding: 0 8px 6px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.ind-table td {
+  padding: 5px 8px 5px 0;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-soft);
+}
+.ind-table tr:last-child td { border-bottom: none; }
+.ind-table .ind-num {
+  text-align: right;
+  font-family: var(--font-code);
+  font-variant-numeric: var(--nums);
+  white-space: nowrap;
+}
+/* The searched company: the wash-and-border selection idiom, not a repaint. */
+.ind-table tr.is-self td { background: var(--panel-2); color: var(--ink); }
+.ind-table tr.is-self td:first-child { border-left: 2px solid var(--accent); padding-left: 6px; }
+.ind-tk {
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--hairline);
+}
+.ind-tk:hover { color: var(--accent); border-color: var(--accent); }
+.ind-name {
+  margin-left: 8px;
+  font-size: 0.66rem;
+  color: var(--ink-fainter);
+}
+
+/* ---- the distribution stats ---------------------------------------------- */
+
+.ind-stats {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+.ind-stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ind-stat dt {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.ind-stat dd {
+  margin: 0;
+  font-size: 1.05rem;
+  font-family: var(--font-code);
+  font-variant-numeric: var(--nums);
+  color: var(--ink);
+}
+
+.ind-stat .ind-stat-sm { font-size: 0.82rem; }
+.ind-num-left {
+  font-family: var(--font-code);
+  font-variant-numeric: var(--nums);
+  white-space: nowrap;
+}
+
+/* ---- charts --------------------------------------------------------------- *
+ * Marks per the house viz rules: thin fills with 2px surface gaps, rounded
+ * data ends, recessive grid, text in ink tokens — never the series color. */
+
+/* The stacked share bar. Gaps between segments are literal 2px of surface. */
+.ind-sharebar { display: flex; flex-direction: column; gap: 6px; }
+.ind-sharebar-track {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.ind-sharebar-seg { flex-basis: 0; min-width: 2px; }
+.ind-sharebar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 0.66rem;
+  color: var(--ink-soft);
+}
+.ind-sharebar-key { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.ind-sharebar-key i {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+
+/* The per-metric range-dot: band, median tick, company dot with a surface
+   ring so it stays legible crossing the band. */
+.ind-range-h { width: 96px; }
+.ind-range-cell { padding-right: 10px; }
+.ind-range {
+  position: relative;
+  display: block;
+  width: 88px;
+  height: 14px;
+}
+.ind-range::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--hairline);
+  border-radius: 999px;
+}
+.ind-range-band {
+  position: absolute;
+  top: 50%;
+  height: 6px;
+  margin-top: -3px;
+  background: var(--ink-fainter);
+  border-radius: 3px;
+}
+.ind-range-med {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: 12px;
+  margin: -6px 0 0 -1px;
+  background: var(--ink-faint);
+  border-radius: 1px;
+}
+.ind-range-dot {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: var(--accent);
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px var(--panel);
+}
+
+/* The history pair: two small multiples, never one dual-axis chart. */
+.ind-charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+.ind-fig { margin: 0; min-width: 0; }
+.ind-fig-cap {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.ind-fig-cap .ind-sharebar-key { text-transform: none; letter-spacing: 0; color: var(--ink-soft); }
+.ind-chart { display: block; width: 100%; height: auto; }
+.ind-chart .ind-chart-t {
+  font-size: 9px;
+  fill: var(--ink-faint);
+  font-family: var(--font-code);
+}
+.ind-chart-zero {
+  stroke: var(--hairline);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+/* The pulse pair rides the bucket-bar idiom, values beside the bars. */
+.ind-pulsebars { margin-bottom: 12px; }
+.ind-pulsebars li { grid-template-columns: minmax(64px, auto) minmax(0, 1fr) 10ch; }
+.ind-pulsebars .ind-bucket-n { white-space: nowrap; }
+@media (max-width: 1180px) {
+  .ind-charts { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- the size buckets ---------------------------------------------------- */
+
+.ind-sh {
+  margin: 14px 0 8px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.ind-sh-note { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--ink-fainter); }
+
+.ind-buckets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.7rem;
+}
+.ind-buckets li {
+  display: grid;
+  grid-template-columns: minmax(110px, auto) 1fr 2.5ch;
+  gap: 10px;
+  align-items: center;
+  color: var(--ink-soft);
+}
+.ind-buckets li.is-self { color: var(--ink); }
+.ind-bucket-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.ind-bucket-bar i {
+  display: block;
+  height: 100%;
+  background: var(--ink-fainter);
+  border-radius: inherit;
+}
+.ind-buckets li.is-self .ind-bucket-bar i { background: var(--accent); }
+.ind-bucket-n {
+  text-align: right;
+  font-family: var(--font-code);
+  font-variant-numeric: var(--nums);
+  color: var(--ink-faint);
+}
+
+/* ---- movers / newest / pulse lists --------------------------------------- */
+
+.ind-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+.ind-two > div { min-width: 0; }
+.ind-two .ind-sh:first-child { margin-top: 0; }
+
+.ind-movers {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.72rem;
+}
+.ind-movers li {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+}
+.ind-mover-g {
+  font-family: var(--font-code);
+  font-variant-numeric: var(--nums);
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+.ind-mover-g.is-up { color: var(--up, var(--ink)); }
+.ind-mover-g.is-down { color: var(--down, var(--ink)); }
+.ind-movers .ind-name {
+  margin-left: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The history table's inline bar column: fixed narrow track so the numbers
+   keep their alignment, the bar reading as annotation rather than chart. */
+.ind-bar-h { width: 90px; }
+.ind-bar-cell { padding-right: 8px; }
+.ind-bar-cell .ind-bucket-bar { display: block; width: 82px; }
+
+@media (max-width: 1180px) {
+  .ind-two { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- src buttons — the shell's .si-srcbtn, spaced for this surface ------- */
+
+.ind-surface .si-srcbtn { vertical-align: 1px; }
+.ind-table .si-srcbtn { margin-left: 8px; }
+
+/* Below 1000px the shell stacks the whole app into a column. A rail still
+   capped at a viewport height becomes a short scrolling box above the content
+   instead of part of the page — the release every Company-group surface needs. */
+@media (max-width: 1000px) {
+  .ind-surface { flex-direction: column; height: auto; overflow: visible; }
+  .ind-railcol {
+    flex: 0 0 auto; width: 100%; align-self: stretch;
+    position: static; max-height: none; overflow: visible;
+  }
+  .ind-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

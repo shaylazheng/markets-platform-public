@@ -1,0 +1,287 @@
+/* Alerts surface. Column widths follow the rest of the shell; everything
+   else is the watched table, which is the only thing here with a shape of
+   its own. Semantic tokens only — the theme flips and this follows. */
+.ws-alerts .col-left { flex: 0 0 340px; }
+.ws-alerts .col-right { flex: 0 0 380px; }
+.ws-alerts .col-left > #pnl-al-delivery { flex: 0 0 auto; }
+.ws-alerts .col-left > #pnl-al-thresholds { flex: 0 0 auto; }
+
+.al-gap { margin-top: 14px; }
+
+/* ---- source boxes: dense by default ------------------------------------- */
+/* A source is one line until opened, and opening it adds a meta line, actions,
+   an optional body and a one-line-per-entry log. Everything here is sized for
+   scanning: tabular numerals, one text size, hairline separators instead of
+   boxes, and no padding that is not doing work. */
+.al-stack { display: flex; flex-direction: column; gap: 8px; }
+
+/* The peek IS the header, so the whole strip is the click target. */
+.al-peek { flex: 1 1 auto; display: flex; align-items: center; gap: 8px; min-width: 0;
+  background: none; border: 0; padding: 0 6px 0 10px; margin: 0; cursor: pointer;
+  font: inherit; color: var(--ink-soft); text-align: left; }
+.al-peek:hover .al-peek-text { color: var(--ink); }
+.al-peek-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; font-size: 0.76rem; font-variant-numeric: tabular-nums; }
+.al-peek-side { flex: none; font-size: 0.68rem; color: var(--ink-fainter);
+  font-variant-numeric: tabular-nums; }
+/* Not scoped to .al-peek: the Evidence feed rail shows the same dot for the
+   same fact, and a live source that reads as dead there is the one mistake
+   this surface cannot afford to make. */
+.al-dot.is-live { background: var(--up);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--up) 22%, transparent); }
+.al-peek:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.al-more { display: flex; align-items: flex-start; gap: 14px; }
+.al-more-main { flex: 1 1 auto; min-width: 0; }
+/* The actions rail. Buttons stack full-width here instead of spending a whole
+   row of the panel on two of them. */
+.al-more-side { flex: 0 0 128px; display: flex; flex-direction: column; gap: 6px; }
+.al-more-side .al-actions { flex-direction: column; align-items: stretch; gap: 6px; margin: 0; }
+.al-more-side .btn { width: 100%; justify-content: center; text-align: center; }
+.al-more-side .al-result { font-size: 0.64rem; line-height: 1.3; word-break: break-word; }
+@media (max-width: 640px) {
+  .al-more { flex-direction: column; }
+  .al-more-side { flex: 1 1 auto; width: 100%; }
+  .al-more-side .al-actions { flex-direction: row; }
+}
+
+/* The health block: one wrapping line of `label value`, not five table rows. */
+.al-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline;
+  font-size: 0.7rem; color: var(--ink-soft); font-variant-numeric: tabular-nums;
+  padding-bottom: 8px; }
+.al-meta i { font-style: normal; color: var(--ink-fainter); text-transform: uppercase;
+  letter-spacing: 0.06em; font-size: 0.62rem; margin-right: 2px; }
+.al-meta-rule { color: var(--ink); }
+.al-err { font-size: 0.7rem; padding: 0 0 8px; }
+
+/* One line per sent message; the text as sent is a click away. */
+.al-line { border-top: 1px solid var(--hairline); }
+.al-line-hit { display: flex; align-items: baseline; gap: 8px; width: 100%; min-width: 0;
+  background: none; border: 0; margin: 0; padding: 5px 0; cursor: pointer;
+  font: inherit; font-size: 0.7rem; color: var(--ink-soft); text-align: left; }
+.al-line-hit:hover .al-line-txt { color: var(--ink); }
+.al-line-t { flex: none; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.al-line-tag { flex: none; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.07em; }
+.al-line-ms { flex: none; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.al-line-txt { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; }
+.al-line.is-failed .al-line-txt { color: var(--ink-fainter); }
+.al-line.is-test .al-line-tag { color: var(--ink-fainter); }
+.al-line .al-log-text { margin: 0 0 8px; }
+.al-empty { font-size: 0.7rem; color: var(--ink-fainter); padding: 6px 0; }
+
+.al-channel { display: flex; align-items: center; gap: 8px; font-size: 0.83rem; color: var(--ink-soft); }
+.al-channel strong { color: var(--ink); text-transform: capitalize; }
+.al-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-fainter); flex: none; }
+.al-channel.is-ready .al-dot { background: var(--up); box-shadow: 0 0 0 3px color-mix(in srgb, var(--up) 22%, transparent); }
+.al-channel.is-off .al-dot { background: var(--down); }
+.al-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.al-result { font-size: 0.75rem; }
+.al-result.up { color: var(--up); } .al-result.down { color: var(--down); }
+.al-facts { display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: var(--ink-soft); }
+.al-facts > div { display: grid; grid-template-columns: 64px 1fr; gap: 8px; }
+.al-facts .label { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-faint); padding-top: 3px; }
+.al-facts .err { grid-column: 1 / -1; }
+.read code { font-family: var(--font-num); font-size: 0.74rem; background: var(--panel-2); padding: 1px 4px; border-radius: 3px; }
+
+.al-form { display: flex; align-items: center; gap: 8px; }
+.al-input { flex: 1 1 auto; min-width: 0; font: inherit; font-family: var(--font-num); font-size: 0.85rem;
+  padding: 5px 8px; border-radius: 6px; border: 1px solid var(--hairline); background: var(--panel-2); color: var(--ink); }
+.al-input:focus { outline: none; border-color: var(--accent); }
+.al-unit { font-size: 0.72rem; color: var(--ink-fainter); white-space: nowrap; }
+
+/* the watched table */
+.al-count { font-size: 0.68rem; color: var(--ink-fainter); margin-left: 4px; }
+.al-add { display: flex; align-items: center; gap: 6px; }
+/* The context toggle: "watch and print it, but never fire on it". Sits with
+   the add form because it is a property of the symbol being added. */
+.al-ctx { display: inline-flex; align-items: center; gap: 4px; font-size: 0.62rem;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-fainter); cursor: pointer; }
+.al-ctx input { margin: 0; accent-color: var(--accent); }
+/* A source's own body, between the uniform actions row and the uniform log. */
+.al-body { margin-top: 12px; }
+.al-add-err { padding: 8px 12px; }
+.al-head, .al-row {
+  /* The per-symbol print time was a column; it is now the row's tooltip, which
+     is where a value you check only when something looks wrong belongs. */
+  display: grid; grid-template-columns: minmax(0, 1.3fr) 82px 68px minmax(150px, 1.3fr) 108px 22px;
+  align-items: center; gap: 8px; padding: 0 12px;
+}
+.al-head { height: 20px; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--ink-faint); border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: var(--panel); }
+.al-head span:nth-child(2), .al-head span:nth-child(3), .al-row .al-last, .al-row .al-chg { text-align: right; }
+.al-row { min-height: 26px; border-bottom: 1px solid var(--hairline); font-size: 0.74rem; }
+.al-row:last-child { border-bottom: none; }
+.al-row.is-index { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.al-row.is-err .al-desc { color: var(--down); }
+.al-name { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+.al-sym { font-weight: 600; color: var(--ink); }
+.al-desc { font-size: 0.66rem; color: var(--ink-fainter); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.al-last { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+.al-chg { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 500; }
+.al-chg.up { color: var(--up); } .al-chg.down { color: var(--down); } .al-chg.flat { color: var(--ink-faint); }
+.al-pills { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.al-pill { display: inline-flex; align-items: baseline; gap: 4px; font-family: var(--font-num); font-size: 0.68rem;
+  padding: 1px 7px; border-radius: 999px; border: 1px solid var(--hairline); color: var(--ink-faint); background: transparent; }
+.al-pill.is-fired { background: var(--down); border-color: var(--down); color: var(--accent-ink, #fff); font-weight: 600; }
+.al-pill-t { font-size: 0.6rem; font-weight: 400; opacity: 0.85; }
+.al-own { font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.al-next { font-size: 0.72rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.al-next .down { color: var(--down); font-weight: 600; }
+.al-time { font-size: 0.66rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.al-x { background: none; border: none; color: var(--ink-fainter); font-size: 1rem; cursor: pointer; padding: 0; line-height: 1; }
+.al-x:hover:not(:disabled) { color: var(--down); }
+.al-x:disabled { opacity: 0.25; cursor: default; }
+.al-banner { padding: 6px 10px; }
+
+/* the sent log */
+.al-log { padding: 9px 12px; border-bottom: 1px solid var(--hairline); }
+.al-log:last-child { border-bottom: none; }
+.al-log.is-test { opacity: 0.8; }
+.al-log-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.al-log-time { font-size: 0.68rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.al-log-badge { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.al-log-badge.up { color: var(--up); } .al-log-badge.down { color: var(--down); }
+.al-log-text { margin: 0; font: inherit; font-size: 0.78rem; line-height: 1.4; white-space: pre-wrap; color: var(--ink-soft); }
+.al-log.is-failed .al-log-text { color: var(--ink-faint); }
+
+@media (max-width: 1400px) {
+  .al-head, .al-row { grid-template-columns: minmax(0, 1.2fr) 76px 62px minmax(130px, 1.2fr) 22px; }
+  .al-head span:nth-child(5), .al-row .al-next { display: none; }
+}
+
+/* ---- Evidence: the record ------------------------------------------------ */
+/* Same vocabulary as the source boxes above — one line per entry, tabular
+   numerals, hairlines instead of boxes — because it is the same material seen
+   whole. The only new shapes are the feed rail and the day divider, and the
+   divider exists so a GAP in the record reads as a gap. */
+.ws-evidence .col-left { flex: 0 0 300px; }
+
+.ev-feed { padding: 7px 0; border-bottom: 1px solid var(--hairline); }
+.ev-feed:first-child { padding-top: 0; }
+.ev-feed:last-of-type { border-bottom: none; }
+.ev-feed-hit { display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0;
+  background: none; border: 0; margin: 0; padding: 0; cursor: pointer;
+  font: inherit; font-size: 0.78rem; color: var(--ink-soft); text-align: left; }
+.ev-feed-hit:hover .ev-feed-name { color: var(--ink); }
+.ev-feed-hit:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.ev-feed-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ev-feed-n { flex: none; font-size: 0.68rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.ev-feed.is-sel .ev-feed-name { color: var(--accent); font-weight: 600; }
+.ev-feed.is-sel .ev-feed-n { color: var(--accent); }
+/* Reuses .al-meta's label/value idiom rather than inventing a second one. */
+.ev-feed-meta { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; margin-top: 3px;
+  font-size: 0.66rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.ev-feed-meta i { font-style: normal; text-transform: uppercase; letter-spacing: 0.06em;
+  font-size: 0.58rem; margin-right: 2px; }
+.ev-feed-err { font-size: 0.66rem; padding: 3px 0 0; }
+.ev-note { margin: 10px 0 0; font-size: 0.66rem; color: var(--ink-fainter); line-height: 1.4; }
+
+/* Filter chips live in the panel HEAD, beside the title: they are what the
+   panel is currently showing, not a control bar above it costing its own row. */
+.ev-chips { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-left: 10px; min-width: 0; }
+.ev-chip { background: none; border: 1px solid transparent; border-radius: 999px;
+  padding: 1px 8px; margin: 0; cursor: pointer; font: inherit; font-size: 0.62rem;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-fainter); }
+.ev-chip b { font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.ev-chip:hover { color: var(--ink-soft); border-color: var(--hairline); }
+.ev-chip.is-on { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.ev-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.ev-filtered { display: flex; align-items: baseline; gap: 8px; padding: 5px 12px;
+  font-size: 0.66rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--hairline); }
+.ev-clear { background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+  font: inherit; font-size: 0.66rem; color: var(--accent); }
+
+/* The day divider. Sticky, so the date you are reading under stays named
+   however far down the record you scroll. */
+.ev-day { position: sticky; top: 0; z-index: 1; background: var(--panel);
+  padding: 4px 12px; border-bottom: 1px solid var(--hairline);
+  font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--ink-faint); }
+.ev-day + .ev-line { border-top: none; }
+
+.ev-line .al-line-hit { padding: 5px 12px; }
+.ev-line-src { flex: none; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--ink-faint); max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ev-open { padding: 0 12px 8px; }
+.ev-open .al-log-text { margin: 0; }
+.ev-pad { padding-left: 12px; padding-right: 12px; }
+
+@media (max-width: 1100px) {
+  .ev-line-src { display: none; }
+}
+
+/* ---- Volatility news: the board across the top of the Monitor ----------- */
+/* The one piece of a source's material the Monitor shows outside that
+   source's box. The surface becomes a column — board, then the usual two
+   columns — so the columns keep their height and their scrolling. */
+.ws-alerts.is-active { flex-direction: column; }
+.al-cols { display: flex; gap: var(--gutter); flex: 1 1 auto; min-height: 0; }
+.al-cols > .col { min-height: 0; }
+#pnl-al-board { flex: 0 0 auto; }
+#pnl-al-board .pnl-body { max-height: 38vh; }
+
+.vn-status { font-size: 0.68rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums;
+  margin-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.vn-status .down { color: var(--down); }
+.vn-status .up { color: var(--up); }
+
+/* One row per stock: name, heat, cross-reference count, move, tags, age, the
+   latest headline. Same vocabulary as the watch table — tabular numerals,
+   hairlines, one text size. */
+.vn-head, .vn-row {
+  display: grid; grid-template-columns: minmax(120px, 0.9fr) 72px 64px 56px minmax(90px, 0.7fr) 36px minmax(200px, 2.2fr);
+  align-items: center; gap: 8px; padding: 0 12px;
+}
+.vn-head { height: 20px; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--ink-faint); border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: var(--panel); z-index: 1; }
+.vn-row { min-height: 28px; border-bottom: 1px solid var(--hairline); font-size: 0.74rem; color: var(--ink-soft); }
+.vn-row:last-child { border-bottom: none; }
+.vn-row.is-hot { background: color-mix(in srgb, var(--down) 6%, transparent); }
+.vn-name { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+.vn-sym { font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vn-code { font-size: 0.62rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.vn-heat { position: relative; display: block; font-family: var(--font-num); font-variant-numeric: tabular-nums;
+  font-weight: 600; color: var(--ink); padding: 2px 6px; border-radius: 4px; overflow: hidden; }
+.vn-bar { position: absolute; inset: 0 auto 0 0; background: color-mix(in srgb, var(--accent) 22%, transparent); z-index: 0; }
+.vn-x { font-family: var(--font-num); font-variant-numeric: tabular-nums; color: var(--ink); }
+.vn-x i { font-style: normal; font-size: 0.62rem; color: var(--ink-fainter); margin-left: 2px; }
+.vn-move { font-family: var(--font-num); font-variant-numeric: tabular-nums; text-align: right; }
+.vn-move.up { color: var(--up); } .vn-move.down { color: var(--down); } .vn-move.flat { color: var(--ink-faint); }
+.vn-tags { display: flex; gap: 4px; flex-wrap: wrap; min-width: 0; }
+.vn-tag { font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.07em; padding: 1px 6px; border-radius: 999px;
+  border: 1px solid var(--hairline); color: var(--ink-faint); white-space: nowrap; }
+.vn-tag.is-hard { border-color: var(--down); color: var(--down); font-weight: 600; }
+.vn-when { font-size: 0.66rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums; text-align: right; }
+.vn-head-link { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); text-decoration: none; }
+.vn-head-link:hover { color: var(--ink); text-decoration: underline; }
+.vn-head-link b { font-weight: 600; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-right: 6px; }
+.vn-head-link b.is-small { color: var(--accent); }
+.vn-empty { font-size: 0.72rem; color: var(--ink-fainter); padding: 8px 12px; }
+.vn-foot { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 6px 12px 0;
+  font-size: 0.66rem; color: var(--ink-fainter); font-variant-numeric: tabular-nums; }
+.vn-foot i { font-style: normal; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.58rem; margin-right: 2px; }
+.vn-foot .down { color: var(--down); }
+
+@media (max-width: 1400px) {
+  .vn-head, .vn-row { grid-template-columns: minmax(110px, 0.9fr) 64px 56px minmax(80px, 0.7fr) 36px minmax(160px, 2fr); }
+  .vn-head span:nth-child(4), .vn-row .vn-move { display: none; }
+}
+@media (max-width: 1000px) {
+  .vn-head, .vn-row { grid-template-columns: minmax(100px, 1fr) 56px 50px minmax(140px, 2fr); }
+  .vn-head span:nth-child(5), .vn-head span:nth-child(6), .vn-row .vn-tags, .vn-row .vn-when { display: none; }
+}
+
+/* The feed roster under the board: every outlet read, by lane, with the
+   item count the last poll got from it. A down feed is crossed, not hidden. */
+.vn-roster { display: flex; flex-direction: column; gap: 4px; padding: 8px 12px 0; }
+.vn-lane { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; font-size: 0.66rem; }
+.vn-lane i { font-style: normal; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.58rem;
+  color: var(--ink-fainter); margin-right: 4px; flex: 0 0 100%; }
+.vn-feed { display: inline-flex; align-items: baseline; gap: 3px; padding: 1px 7px; border-radius: 999px;
+  border: 1px solid var(--hairline); color: var(--ink-soft); white-space: nowrap; }
+.vn-feed b { font-weight: 500; color: var(--ink-fainter); font-variant-numeric: tabular-nums; font-size: 0.6rem; }
+.vn-feed.is-down { color: var(--down); border-color: var(--down); }

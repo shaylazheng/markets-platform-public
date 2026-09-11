@@ -1,0 +1,15 @@
+{
+  "name": "@markets/summary",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "What a company is, before anything computed about it: Item 1 quoted verbatim, the facets an investment report opens with, and an explicit account of what the filings do not say.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/core": "*",
+    "@markets/shell": "*"
+  }
+}

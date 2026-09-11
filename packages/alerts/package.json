@@ -1,0 +1,15 @@
+{
+  "name": "@markets/alerts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The signal monitor: every alert source's poll loop, delivery and log (Monitor), and the merged record of what they have sent beside the telemetry that says whether the feeds were up (Evidence).",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/shell": "*",
+    "@markets/core": "*"
+  }
+}

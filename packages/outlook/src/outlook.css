@@ -1,0 +1,421 @@
+/* Risks & Catalysts surface.
+ *
+ * Declares NO :root block and redefines NO tokens — bloom.css stays the
+ * authority on the palette, the same contract management.css honours. Every
+ * colour here is a var(). Layout is the Company group's Console: sticky rail,
+ * results to the right.
+ */
+.rc-surface {
+  height: 100%; min-height: 0;
+  display: flex; flex-direction: row; align-items: flex-start;
+  gap: var(--gutter); padding: var(--gutter);
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.rc-surface::-webkit-scrollbar { width: 9px; }
+.rc-surface::-webkit-scrollbar-track { background: transparent; }
+.rc-surface::-webkit-scrollbar-thumb {
+  background: var(--hairline); border-radius: 999px; border: 2px solid var(--bg);
+}
+
+.rc-rail {
+  flex: 0 0 320px; align-self: flex-start;
+  position: sticky; top: 0; z-index: 5;
+  max-height: calc(100vh - var(--topbar-h) - var(--gutter) * 2);
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: var(--gutter);
+}
+.rc-rail > .pnl { flex: 0 0 auto; }
+
+.rc-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: var(--gutter); }
+
+.rc-flag {
+  flex: 0 0 auto;
+  padding: 9px 12px; border-left: 2px solid var(--accent);
+  background: var(--panel); border-radius: var(--radius);
+  font-size: 0.8rem; line-height: 1.6; color: var(--ink-soft);
+}
+.rc-flag strong { color: var(--ink); font-weight: 600; }
+
+.rc-dim { color: var(--ink-fainter); }
+.rc-empty { padding: 14px 12px; font-size: 0.78rem; color: var(--ink-faint); }
+
+/* ---- the three lanes ------------------------------------------------------ */
+
+/* Risks, Catalysts, Analyst views: three questions side by side, not one
+   scroll. Each lane is a column with its own tinted header; the seam between
+   topics is a gutter, not a band the reader scrolls past. Tones are the
+   dashboard's own semantics — risks read in the down hue, catalysts in the up
+   hue, the street in the accent — applied to the header text and a hairline
+   only, never to body ink. */
+.rc-lanes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+.rc-lane { display: flex; flex-direction: column; gap: var(--gutter); min-width: 0; }
+
+/* Below three columns the lanes stop being columns and become a FLOW.
+ *
+ * A grid cannot pack three lanes of unequal height into two columns without
+ * leaving a hole: whichever lane is shortest, its column ends early. Every
+ * arrangement was measured on AAPL at 1400px — the best grid packing still
+ * left ~530px dead under the shortest column, and the worst left 2790px.
+ * So at this width the lanes are handed to multicol instead, which balances
+ * the columns for whatever this company's content actually weighs.
+ *
+ * The trade, made deliberately: a lane may now continue in the next column,
+ * so the three headers no longer sit side by side. Sections stay whole
+ * (`break-inside: avoid`) and a lane header never ends a column
+ * (`break-after: avoid`), so the seam always falls BETWEEN two sections.
+ *
+ * `.rc-lane` drops to `display: block` here on purpose: a flex container
+ * fragments unreliably across columns, and its `gap` would not survive the
+ * break either — the margins below replace it. */
+@media (max-width: 1500px) {
+  .rc-lanes {
+    display: block;
+    columns: 2;
+    column-gap: var(--gutter);
+    align-items: initial;
+  }
+  .rc-lane { display: block; }
+  .rc-lane > * + * { margin-top: var(--gutter); }
+  .rc-lane + .rc-lane { margin-top: var(--gutter); }
+
+  /* Where the seam may and may not fall.
+     Sections must be breakable or the balance is too coarse to work: with
+     seven unbreakable blocks the only split multicol can find is the same one
+     the grid found, ~520px out. Letting a section continue in the next column
+     drops that to double figures. What must NEVER split is listed below —
+     a heading away from its rows, a row mid-sentence, a table away from its
+     header, or the rating meter, would each be worse than any gap.
+
+     Tables are the reason the balance is not perfect at every width. Letting
+     them break packs the columns to within ~50px, but Chrome does not repeat
+     `<thead>` across a multicol fragment (only in paged media), so the
+     continuation leads a column as unlabelled numbers. On a surface whose
+     whole premise is that every figure is traceable, an orphaned numeric
+     table is worse than dead space, so tables stay whole and the seam falls
+     in the long lists instead. */
+  .rc-lane-h { break-after: avoid; break-inside: avoid; }
+  .rc-sec { break-inside: auto; }
+  .rc-sec-head { break-inside: avoid; break-after: avoid; }
+  .rc-risk,
+  .rc-stories li,
+  .rc-web-changes li,
+  .rc-group,
+  .rc-guidance,
+  .rc-meter,
+  .rc-trend,
+  .rc-riskbar,
+  .rc-cite,
+  .rc-warn,
+  .rc-table,
+  .rc-foot { break-inside: avoid; }
+}
+
+/* One column: no seam to manage, so the flow rules are moot — but multicol
+   with `columns: 1` still balances nothing and costs nothing, and keeping the
+   same box model here means the margins above stay correct. */
+@media (max-width: 1080px) {
+  .rc-lanes { columns: 1; }
+}
+
+
+.rc-lane-h {
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 6px 2px 5px;
+  border-top: 2px solid var(--hairline);
+}
+.rc-lane-h span {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.11em; color: var(--ink-soft);
+}
+.rc-lane-h em { font-style: normal; font-size: 0.66rem; color: var(--ink-fainter); }
+.rc-lane.is-risk .rc-lane-h { border-top-color: color-mix(in oklab, var(--down) 55%, transparent); }
+.rc-lane.is-risk .rc-lane-h span { color: var(--down); }
+.rc-lane.is-cat .rc-lane-h { border-top-color: color-mix(in oklab, var(--up) 55%, transparent); }
+.rc-lane.is-cat .rc-lane-h span { color: var(--up); }
+.rc-lane.is-street .rc-lane-h { border-top-color: color-mix(in oklab, var(--accent) 55%, transparent); }
+.rc-lane.is-street .rc-lane-h span { color: var(--accent); }
+
+/* The voice chip — the one mark that says WHOSE claim a block is. */
+.rc-chip {
+  flex: 0 0 auto; align-self: flex-start;
+  font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; padding: 2px 6px; border-radius: 3px; line-height: 1.5;
+}
+.rc-chip.is-company { color: var(--accent); background: color-mix(in oklab, var(--accent) 13%, transparent); }
+.rc-chip.is-street { color: var(--ink-soft); background: var(--panel-2); border: 1px solid var(--hairline); }
+.rc-chip.is-house { color: var(--ink-fainter); background: transparent; border: 1px dashed var(--hairline); }
+
+/* ---- sections -------------------------------------------------------------- */
+
+.rc-sec {
+  background: var(--panel); border-radius: var(--radius);
+  border-left: 2px solid transparent;
+}
+.rc-sec.is-company { border-left-color: color-mix(in oklab, var(--accent) 45%, transparent); }
+.rc-sec.is-street { border-left-color: var(--hairline); }
+.rc-sec.is-focused { outline: 1px solid color-mix(in oklab, var(--accent) 35%, transparent); }
+
+.rc-sec-head { display: flex; align-items: stretch; }
+.rc-sec-main {
+  flex: 1 1 auto; min-width: 0;
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 6px 9px 12px; margin: 0;
+  background: none; border: none; cursor: pointer;
+  text-align: left; font: inherit; color: inherit;
+}
+.rc-sec-main:hover .rc-sec-title { color: var(--accent); }
+.rc-sec-titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rc-sec-title {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink);
+}
+.rc-sec-count {
+  margin-left: 8px; font-size: 0.66rem; font-weight: 600;
+  color: var(--ink-fainter); letter-spacing: 0;
+}
+/* The one-line summary: visible open or closed, so a collapsed section still
+   states its fact rather than just its name. */
+.rc-sec-blurb { font-size: 0.72rem; line-height: 1.45; color: var(--ink-faint); text-transform: none; letter-spacing: 0; }
+
+.rc-sec-caret {
+  flex: 0 0 34px; display: flex; align-items: center; justify-content: center;
+  background: none; border: none; border-left: 1px solid var(--hairline-soft);
+  color: var(--ink-fainter); font-size: 0.75rem; cursor: pointer;
+}
+.rc-sec-caret:hover { color: var(--accent); background: var(--panel-2); }
+
+.rc-sec-body { border-top: 1px solid var(--hairline-soft); }
+.rc-sec.is-closed { opacity: 0.85; }
+
+/* ---- src buttons in flow -------------------------------------------------- */
+
+/* The shared inspector's affordance (base.css .si-srcbtn), aligned into this
+   surface's rows: never shrinking in a flex risk row, centred on the section
+   head next to the caret, baseline-flowing everywhere it sits inline. */
+.rc-risk .si-srcbtn { flex: 0 0 auto; }
+.rc-sec-head > .si-srcbtn { align-self: center; margin-right: 4px; }
+.rc-story-m .si-srcbtn, .rc-guidance-k .si-srcbtn,
+.rc-foot .si-srcbtn, .rc-table .si-srcbtn { vertical-align: baseline; }
+
+/* ---- the risk list ------------------------------------------------------- */
+
+.rc-risks { margin: 0; padding: 4px 0; list-style: none; }
+.rc-group {
+  padding: 10px 12px 4px;
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--ink-fainter);
+}
+.rc-risk {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 6px 12px; border-bottom: 1px solid var(--hairline-soft);
+  font-size: 0.79rem; line-height: 1.5; color: var(--ink-soft);
+}
+.rc-risk:last-child { border-bottom: none; }
+.rc-risk-t { flex: 1 1 auto; }
+
+/* Collapsible rows: the whole gist line is the toggle, restyled from button
+   chrome back to list-row text. Collapsed shows the ✦ model gist (or the
+   heading's opening words while gists write); expanded shows the verbatim
+   heading in the same place. */
+.rc-risk-toggle {
+  flex: 1 1 auto; display: flex; align-items: baseline; gap: 7px;
+  background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+  font: inherit; color: inherit; text-align: left;
+}
+.rc-caret { flex: 0 0 auto; font-size: 0.6rem; color: var(--ink-fainter); }
+.rc-risk-toggle:hover .rc-caret { color: var(--accent); }
+.rc-gist { flex: 1 1 auto; color: var(--ink); }
+.rc-gist-m { color: var(--accent); margin-right: 5px; font-size: 0.68rem; }
+.rc-riskbar {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 7px 12px 3px;
+}
+.rc-riskbar-btn {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-size: 0.66rem; font-weight: 600; color: var(--ink-faint);
+}
+.rc-riskbar-btn:hover { color: var(--accent); }
+.rc-riskbar-note { font-size: 0.64rem; color: var(--ink-fainter); }
+/* The citation chip: every heading carries the filing it was copied from. */
+.rc-cite {
+  flex: 0 0 auto;
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.05em;
+  padding: 1px 6px; border-radius: 3px;
+  color: var(--accent); background: color-mix(in oklab, var(--accent) 12%, transparent);
+  white-space: nowrap;
+}
+.rc-risk a { text-decoration: none; }
+.rc-risk a:hover .rc-cite { background: color-mix(in oklab, var(--accent) 24%, transparent); }
+
+/* ---- catalysts ------------------------------------------------------------ */
+
+.rc-guidance { padding: 10px 12px; border-bottom: 1px solid var(--hairline-soft); }
+.rc-guidance-k {
+  display: block; margin-bottom: 4px;
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--ink-fainter);
+}
+.rc-guidance p { margin: 0 0 4px; font-size: 0.82rem; line-height: 1.55; color: var(--ink); }
+.rc-guidance-src { font-size: 0.7rem; color: var(--ink-faint); }
+.rc-guidance-src a, .rc-foot a { color: var(--ink-soft); }
+.rc-guidance-src a:hover, .rc-foot a:hover { color: var(--accent); }
+
+.rc-when { white-space: nowrap; font-variant-numeric: var(--nums); color: var(--ink); font-weight: 600; }
+
+/* ---- tables --------------------------------------------------------------- */
+
+.rc-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.79rem; font-variant-numeric: var(--nums);
+}
+.rc-table thead th {
+  position: sticky; top: 0; z-index: 1; background: var(--panel-head);
+  text-align: right; padding: 6px 10px;
+  font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--ink-fainter);
+  border-bottom: 1px solid var(--hairline);
+}
+.rc-table td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--hairline-soft); }
+.rc-table tbody tr:hover td { background: var(--panel-2); }
+.rc-table tr:last-child td { border-bottom: none; }
+.rc-l { text-align: left !important; }
+.rc-num { font-variant-numeric: var(--nums); }
+
+/* A pending period is the street's live expectation — the row the panel
+   exists for — so it leads and reads a shade brighter, not dimmer. */
+.rc-table tr.is-pending td { color: var(--ink); background: color-mix(in oklab, var(--accent) 4%, transparent); }
+.rc-table .is-up { color: var(--up); }
+.rc-table .is-down { color: var(--down); }
+.rc-thin {
+  margin-left: 5px; padding: 0 4px;
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.04em;
+  color: var(--ink-faint); background: var(--panel-2);
+  border: 1px solid var(--hairline); border-radius: 3px;
+  cursor: help;
+}
+
+/* ---- press rails ---------------------------------------------------------- */
+
+.rc-stories { margin: 0; padding: 6px 0; list-style: none; }
+.rc-stories li {
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 6px 12px; border-bottom: 1px solid var(--hairline-soft);
+}
+.rc-stories li:last-child { border-bottom: none; }
+.rc-stories a {
+  font-size: 0.79rem; line-height: 1.45; color: var(--ink-soft); text-decoration: none;
+}
+.rc-stories a:hover { color: var(--accent); }
+.rc-story-m { font-size: 0.62rem; color: var(--ink-fainter); }
+
+.rc-foot {
+  margin: 0; padding: 9px 12px;
+  font-size: 0.74rem; line-height: 1.65; color: var(--ink-faint);
+}
+
+/* The foreign-filer extraction caveat. Deliberately loud — --down red, not a
+   muted foot note — because the list under it looks exactly like a 10-K
+   extraction and the reader must know it came from a structure with less
+   mileage before trusting its coverage. */
+.rc-warn {
+  margin: 8px 12px 2px; padding: 8px 11px;
+  border-left: 3px solid var(--down);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--down) 9%, transparent);
+  font-size: 0.74rem; line-height: 1.6; color: var(--down);
+}
+.rc-warn b { color: var(--down); }
+.rc-warn a { color: inherit; text-decoration: underline; }
+.rc-warn a:hover { color: var(--down); }
+.rc-foot code { font-family: var(--font-code); font-size: 0.68rem; }
+
+/* ---- ratings across the web ----------------------------------------------- *
+ * All five rating steps come from bloom.css's --rate-N ramp (validated per
+ * mode). Two steps sit below 3:1 against the panel by design; everywhere a
+ * step is drawn it therefore carries a direct label — the meter's bands are
+ * position-labelled, the chart's segments write their counts, and the table
+ * repeats every figure in ink. */
+
+.rc-rate-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 2px;
+  margin-right: 6px; vertical-align: baseline;
+}
+.is-r1 { --rate: var(--rate-1); }
+.is-r2 { --rate: var(--rate-2); }
+.is-r3 { --rate: var(--rate-3); }
+.is-r4 { --rate: var(--rate-4); }
+.is-r5 { --rate: var(--rate-5); }
+.rc-rate-dot { background: var(--rate, var(--ink-fainter)); }
+
+/* The meter: hero number left, the 1–5 scale right. */
+.rc-meter {
+  display: flex; align-items: center; gap: 18px;
+  padding: 12px 12px 8px;
+}
+.rc-meter-hero { display: flex; flex-direction: column; flex: 0 0 auto; min-width: 86px; }
+.rc-meter-score {
+  font-size: 1.9rem; font-weight: 650; line-height: 1.1;
+  font-variant-numeric: var(--nums); letter-spacing: -0.02em; color: var(--ink);
+}
+.rc-meter-word { font-size: 0.78rem; font-weight: 700; color: var(--rate, var(--ink)); }
+.rc-meter-sub { font-size: 0.62rem; color: var(--ink-fainter); }
+.rc-meter-plot { flex: 1 1 auto; min-width: 0; }
+
+/* One dot per source above the track — agreement is visible as clustering. */
+.rc-meter-dots { position: relative; height: 12px; }
+.rc-meter-dot {
+  position: absolute; bottom: 1px; transform: translateX(-50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink-soft); box-shadow: 0 0 0 2px var(--panel);
+  cursor: help;
+}
+.rc-meter-track {
+  position: relative; display: flex; gap: 2px; height: 10px;
+}
+.rc-meter-seg { flex: 1; background: var(--rate); }
+.rc-meter-seg:first-child { border-radius: 4px 0 0 4px; }
+.rc-meter-seg:last-child { border-radius: 0 4px 4px 0; }
+.rc-meter-pin {
+  position: absolute; top: -3px; bottom: -3px; transform: translateX(-50%);
+  width: 3px; border-radius: 2px; background: var(--ink);
+  box-shadow: 0 0 0 2px var(--panel); cursor: help;
+}
+.rc-meter-scale {
+  display: flex; justify-content: space-between; margin-top: 4px;
+  font-size: 0.55rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--ink-fainter);
+}
+
+/* The table inherits rc-table; only the identity link differs. */
+.rc-web-table a { color: var(--ink); font-weight: 600; text-decoration: none; }
+.rc-web-table a:hover { color: var(--accent); }
+.rc-web-table a::after { content: " ↗"; font-size: 0.6rem; color: var(--ink-fainter); }
+.rc-web-dead td { color: var(--ink-fainter); }
+
+.rc-web-changes { margin: 0; padding: 4px 12px 6px; list-style: none; }
+.rc-web-changes li {
+  padding: 4px 0; font-size: 0.76rem; color: var(--ink-soft);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.rc-web-changes li:last-child { border-bottom: none; }
+
+/* The trend chart. Text wears text tokens; only marks wear the ramp. */
+.rc-trend { margin: 4px 8px 0; }
+.rc-trend svg { display: block; width: 100%; height: auto; }
+.rc-trend-seg { fill: var(--rate); }
+.rc-trend-axis { font-size: 10px; fill: var(--ink-fainter); font-family: var(--font-ui); }
+.rc-trend-total { font-size: 10px; font-weight: 600; fill: var(--ink-faint); font-family: var(--font-ui); }
+/* Direct labels inside segments: dark ink on the light steps, panel-white on
+   the deep poles — the relief the palette's contrast WARN requires. */
+.rc-trend-count { font-size: 10px; font-weight: 600; font-family: var(--font-ui); fill: rgba(255, 255, 255, 0.92); }
+.rc-trend-count.is-r2, .rc-trend-count.is-r4 { fill: rgba(10, 12, 11, 0.78); }
+.rc-trend-legend {
+  display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 2px 0 6px; padding: 0 4px;
+  font-size: 0.62rem; color: var(--ink-faint);
+}
+.rc-trend-chip { display: inline-flex; align-items: center; }

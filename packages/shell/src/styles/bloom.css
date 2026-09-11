@@ -1,0 +1,214 @@
+/* ============================================================================
+   BLOOM — one palette, five layouts.
+
+   Warm blush neutrals with a plum accent. The panel body sits almost exactly on
+   the background (contrast ~1.03), so blocks read as tonal shifts in a
+   continuous field rather than as cards. Because tone can no longer carry the
+   edge on its own, two other channels do: the gradient's top stop keeps a
+   larger lift (~1.075) so the upper edge catches light, and the shadow is
+   slightly deeper than the tonal step would suggest.
+
+   Identity colours are held constant — the five event-category hues (validated
+   with the data-viz validator, each also carrying a distinct glyph) and the
+   reserved up/down pair.
+
+   Layout via <html data-variant="column|banner|split|rail|mosaic">,
+   gradient shape via data-grad (see grads.css).
+   ========================================================================= */
+
+:root {
+  --bg: #f2ecee;
+  --panel: #f4f0f1; --panel-2: #f6f4f4; --panel-head: transparent;
+  --surf-hi: #f8f5f6; --surf-lo: #f4f0f1;
+  --head-grad: linear-gradient(180deg, rgba(138, 58, 107, 0.05), transparent);
+  --topbar-grad: linear-gradient(180deg, #f6f1f3, rgba(246, 241, 243, 0));
+  --cream: #f6f4f4; --band: #f1eaec;
+
+  --ink: #241c20;
+  --ink-soft: rgba(36, 28, 32, 0.72);
+  --ink-faint: rgba(36, 28, 32, 0.50);
+  --ink-fainter: rgba(36, 28, 32, 0.32);
+  --hairline: rgba(36, 28, 32, 0.12);
+  --hairline-soft: rgba(36, 28, 32, 0.06);
+  --chart-grid: rgba(36, 28, 32, 0.06);
+  --shadow-soft: 0 1px 2px rgba(36, 28, 32, 0.06), 0 6px 18px rgba(36, 28, 32, 0.07);
+
+  --accent: #8a3a6b; --accent-ink: #fffcfd;
+  /* The panel swatch family, borrowed from the report document's accent
+     vocabulary (plum brand + navy / forest / oxblood) — each panel wears its
+     group's color as a top band and chip, the way the document's sections
+     wear their accent rule. */
+  --sw-a: #8a3a6b; --sw-b: #2e4e77; --sw-c: #226248; --sw-d: #7d2f3a;
+
+  --cat-econ: #2a78d6;      /* circle   */
+  --cat-fed: #eb6834;       /* square   */
+  --cat-market: #4a3aa7;    /* diamond  */
+  --cat-earnings: #1baf7a;  /* ring     */
+  --cat-energy: #c25fb0;    /* triangle */
+  --up: #0e8a52;
+  --down: #d1442b;
+
+  /* The analyst-rating scale, Strong Buy → Sell — a diverging ramp anchored
+     on the up/down pair with a deliberately neutral Hold midpoint. Validated
+     with the data-viz validator per mode against the panel surface; the
+     neutral's chroma sits below the categorical floor BY DESIGN (a diverging
+     midpoint must read as neither pole), and the two sub-3:1 steps carry
+     direct labels wherever they are drawn. Green and red steps are never
+     adjacent — Hold sits between them. */
+  --rate-1: #0b6b40;
+  --rate-2: #3fbc7d;
+  --rate-3: #7b7f84;
+  --rate-4: #e8874d;
+  --rate-5: #c23a20;
+
+  --radius: 3px; --radius-sm: 2px; --gutter: 8px; --topbar-h: 48px; --head-h: 32px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #120e11;
+  --panel: #161215; --panel-2: #1a1619; --panel-head: transparent;
+  --surf-hi: #1c161a; --surf-lo: #161215;
+  --head-grad: linear-gradient(180deg, rgba(226, 138, 190, 0.07), transparent);
+  --topbar-grad: linear-gradient(180deg, #171216, rgba(23, 18, 22, 0));
+  --cream: #1a1619; --band: #100c0f;
+
+  --ink: #ece2e7;
+  --ink-soft: rgba(236, 226, 231, 0.70);
+  --ink-faint: rgba(236, 226, 231, 0.47);
+  --ink-fainter: rgba(236, 226, 231, 0.29);
+  --hairline: rgba(236, 226, 231, 0.10);
+  --hairline-soft: rgba(236, 226, 231, 0.05);
+  --chart-grid: rgba(236, 226, 231, 0.06);
+  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.45);
+
+  --accent: #e28abe; --accent-ink: #1a0813;
+  /* The dark swatch family — lifted variants of the same four, re-picked for
+     dark's narrower lightness band rather than flipped. */
+  --sw-a: #e28abe; --sw-b: #82aad8; --sw-c: #55b189; --sw-d: #d4838f;
+
+  --cat-econ: #3987e5;
+  --cat-fed: #d95926;
+  --cat-market: #8b5cd6;
+  --cat-earnings: #199e70;
+  --cat-energy: #cf5aa8;
+  --up: #35c98a;
+  --down: #ff6a4a;
+
+  /* The rating ramp's dark steps — re-validated inside dark's narrower
+     lightness band, not a flip of the light ones. */
+  --rate-1: #00713d;
+  --rate-2: #00a95a;
+  --rate-3: #6f7377;
+  --rate-4: #d8752b;
+  --rate-5: #ad2f13;
+}
+
+/* ---------------------------------------------------------------------------
+   Layout — a metrics ribbon across the top, then three working bays beneath.
+   ------------------------------------------------------------------------ */
+.ws-markets .col { display: contents; }
+.ws-markets .pnl { min-height: 0; }
+#pnl-chart { grid-area: chart; }
+#pnl-featured { grid-area: featured; }
+#pnl-watchlist { grid-area: watch; }
+#pnl-glance { grid-area: glance; }
+#pnl-insight { grid-area: insight; }
+
+.ws-markets.is-active { flex-direction: column; }
+.ws-markets .grp-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 1fr);
+  grid-template-rows: 92px minmax(0, 176px) minmax(0, 1fr);
+  grid-template-areas:
+    "glance glance   glance"
+    "watch  featured insight"
+    "watch  chart    insight";
+}
+
+.chart-meta { padding: 8px 14px 3px; }
+.chart-meta .cm-val { font-size: 1.6rem; }
+.chart-foot { padding: 5px 12px; }
+
+/* With almost no tonal step between panel and ground, selection and focus have
+   to carry themselves. */
+.wl-row.is-sel { box-shadow: inset 3px 0 0 var(--accent); }
+.stat.is-sel { box-shadow: inset 0 -2px 0 var(--accent); }
+.sym-btn:focus-visible, .wl-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.pnl-compact .stat { border: none; }
+
+/* ---------------------------------------------------------------------------
+   Glance — the eight metrics as a ribbon of cells, divided by tone not rules.
+   ------------------------------------------------------------------------ */
+#pnl-glance .pnl-head { display: none; }
+#pnl-glance .pnl-body { padding: 0; overflow-y: hidden; overflow-x: auto; }
+.pnl-compact .read, .pnl-compact .sum-news,
+.pnl-compact .sum-news-kicker, .pnl-compact .asof { display: none; }
+.pnl-compact .tiles { display: flex; height: 100%; gap: 0; background: none; border: none; }
+.pnl-compact .stat {
+  flex: 1 0 156px; justify-content: center; gap: 3px; padding: 0 16px; background: none;
+  box-shadow: inset -1px 0 0 var(--hairline-soft);
+}
+.pnl-compact .stat:last-child { box-shadow: none; }
+.pnl-compact .stat .label { font-size: 0.55rem; letter-spacing: 0.13em; }
+.pnl-compact .stat .num { font-size: 1.25rem; }
+
+/* ---------------------------------------------------------------------------
+   Surface — flat. No sweep across the panel; the shadow and the faint tonal
+   step carry the edge on their own.
+   ------------------------------------------------------------------------ */
+:root { --panel-grad: var(--surf-lo); }
+
+/* ---------------------------------------------------------------------------
+   Headers — the minimal chrome of the inline treatment, with each panel title
+   set in a lifted chip at the panel's top-left, like a folder tab. No accent
+   edge on the chip: the lift alone marks it.
+   ------------------------------------------------------------------------ */
+:root { --head-h: 30px; --topbar-h: 42px; }
+
+.topbar { background: transparent; border-bottom: none; box-shadow: none; }
+.statusbar { background: transparent; border-top: none; }
+.tab { padding: 4px 10px; font-size: 0.78rem; background: transparent; border-color: transparent; }
+.tab:hover { background: transparent; color: var(--ink); }
+.tab.is-active { background: transparent; color: var(--accent); font-weight: 700; }
+.mkt-pill { border: none; background: transparent; padding: 3px 6px; }
+
+.pnl-head { padding: 0 10px 0 8px; background: transparent; align-items: flex-end; }
+.pnl-head > .pnl-swatch { display: none; }
+/* Small, letterspaced, muted — the label reads as a grey block of type rather
+   than a heading. The chip keeps the folder-tab shape; no accent edge. */
+.pnl-title {
+  text-transform: uppercase; letter-spacing: 0.12em;
+  font-size: 0.6rem; font-weight: 700; color: var(--ink-faint);
+  background: var(--panel-2); border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  padding: 7px 12px;
+}
+/* The chart's ticker already sits inside the picker button, so it takes the
+   same type treatment without a second chip behind it. */
+.pnl-sym {
+  text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: 0.66rem; font-weight: 700; color: var(--ink-soft);
+  background: none; padding: 0;
+}
+.pnl-tools { padding-bottom: 4px; }
+.wl-head { box-shadow: none; }
+
+@media (max-width: 1000px) {
+  .ws-markets .grp-body { display: flex; flex-direction: column; }
+  .ws-markets .col { display: flex; }
+  .pnl-compact .tiles { height: auto; }
+}
+
+/* "New build — reload": the tab is running an older bundle than the server
+   holds. Accent-filled on purpose — this is the one chrome element whose whole
+   job is to be pressed and disappear. */
+.tb-stale {
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 3px 11px;
+  cursor: pointer;
+}
+.tb-stale:hover { filter: brightness(1.08); }

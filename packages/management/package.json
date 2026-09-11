@@ -1,0 +1,16 @@
+{
+  "name": "@markets/management",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Who runs the company \u2014 roster, tenure, turnover and alignment, from SEC ownership filings.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/core": "*",
+    "@markets/shell": "*",
+    "rss-parser": "^3.13.0"
+  }
+}

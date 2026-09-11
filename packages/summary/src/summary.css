@@ -1,0 +1,698 @@
+/* Summary surface.
+ *
+ * Declares NO :root block and redefines NO tokens — bloom.css stays the
+ * authority on the palette, the same contract book.css, insider.css and
+ * competitors.css honour. Every colour here is a var().
+ *
+ * These values are NOT the rail's. This content lived in CompanyRail first, at
+ * rail scale — 0.55rem micro-caps labels, 66px stat columns, everything past the
+ * first paragraph behind a toggle. Carried onto a full surface those read as a
+ * widget someone shrank rather than a report, so the type sizes, the grid
+ * minimums and the line lengths are all set for a page here.
+ *
+ * Scrolls internally like .bk-surface and .cmp-surface: a lede, a figure deck
+ * and six panels do not share one viewport height, and the app shell itself
+ * must never scroll.
+ */
+
+.sm-surface {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gutter);
+  padding: var(--gutter);
+  /* The SURFACE scrolls, with the rail sticky inside it — the .bk/.vl pattern.
+     This carried `overflow: hidden` with `overflow-y: auto` on .sm-main, but
+     align-items: flex-start means .sm-main never gets a constrained height, so
+     neither box ever scrolled: content past the fold was simply clipped, and a
+     focus jump or scrollIntoView could shift the hidden-overflow box and cut
+     off the TOP with no way to scroll back. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.sm-surface::-webkit-scrollbar { width: 9px; }
+.sm-surface::-webkit-scrollbar-track { background: transparent; }
+.sm-surface::-webkit-scrollbar-thumb {
+  background: var(--hairline); border-radius: 999px; border: 2px solid var(--bg);
+}
+
+/* The rail column, matching .vl-railcol so the Company group's five surfaces
+   put the ticker box in exactly the same place. */
+.sm-railcol {
+  flex: 0 0 320px;
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  max-height: calc(100vh - var(--topbar-h) - var(--gutter) * 2);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+.sm-railcol > * { flex: 0 0 auto; }
+
+.sm-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+
+/* Two panels abreast, collapsing to one when the column cannot hold both. */
+.sm-band { display: flex; gap: var(--gutter); flex: 0 0 auto; align-items: flex-start; }
+.sm-band > .pnl {
+  flex: 1 1 50%;
+  min-width: 0;
+  /* Each panel its own height. Without this the shorter of a pair stretches to
+     match, and a company whose filings name two counterparties gets a panel with
+     a third of a screen of empty box under them — which reads as content that
+     failed to load rather than as a company with few disclosed counterparties. */
+  align-self: flex-start;
+}
+
+/* Two columns INSIDE a full-width panel. "Our view" splits into the claim and
+   the tests of the claim, which belong side by side — and the split also keeps
+   each line at a readable length now that nothing on this surface caps a
+   measure. */
+.sm-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+.sm-two > div { min-width: 0; }
+@media (max-width: 1180px) {
+  .sm-two { grid-template-columns: minmax(0, 1fr); }
+  .sm-band { flex-direction: column; }
+  .sm-band > .pnl { flex: 1 1 auto; width: 100%; }
+}
+
+/* ---- the quote ---------------------------------------------------------- *
+ *
+ * Marked as a quotation with a rule down the side. Full measure, by request:
+ * this carried a 68ch cap on the usual readability argument, and the verdict
+ * after living with it was that the summary reads as a strip of text lost in an
+ * empty panel. The line-height is up a notch to keep the long lines followable.
+ */
+.sm-lede {
+  margin: 0;
+  padding: 0 0 0 14px;
+  border-left: 2px solid var(--accent);
+  max-width: none;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.sm-lede cite {
+  display: block;
+  margin-top: 9px;
+  font-style: normal;
+  font-size: 0.68rem;
+  line-height: 1.5;
+  color: var(--ink-fainter);
+}
+.sm-more { color: var(--ink-fainter); }
+
+.sm-filing,
+.sm-headnote {
+  margin-left: auto;
+  flex: none;
+  font-size: 0.66rem;
+  color: var(--ink-fainter);
+}
+.sm-filing {
+  font-family: var(--font-code);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+}
+.sm-filing:hover { color: var(--accent); border-color: var(--accent); }
+
+/* No measure caps anywhere on this surface — same request and same verdict as
+   the lede above: capped prose read as strips of text lost in wide panels, so
+   every text block runs the full panel width, with line-height carrying the
+   readability instead. */
+.sm-none {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--ink-faint);
+}
+.sm-empty { padding: 4px 0; display: flex; flex-direction: column; gap: 9px; }
+.sm-empty p { margin: 0; font-size: 0.82rem; line-height: 1.65; color: var(--ink-faint); }
+.sm-empty b { color: var(--ink-soft); }
+
+/* ---- the rail's metric block -------------------------------------------- *
+ *
+ * The figure deck (once `.sm-figs`, a tile grid in the main column) lives in
+ * the 320px rail now, so tiles became rows: label left, value right, and a sub
+ * line carrying the multi-year average and the year-over-year change. Rendered
+ * inside `.co-rail`, which supplies the panel background and padding — nothing
+ * here paints its own surface.
+ */
+.sm-ym { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+.sm-ym-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline-soft);
+}
+.sm-ym-title {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--ink-fainter);
+}
+.sm-ym-year {
+  appearance: none;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  color: var(--ink-soft);
+  font-family: var(--font-code);
+  font-size: 0.66rem;
+  font-variant-numeric: var(--nums);
+  padding: 2px 7px;
+  cursor: pointer;
+}
+.sm-ym-year:hover { border-color: var(--accent); color: var(--ink); }
+
+.sm-ym-rows { margin: 0; display: flex; flex-direction: column; gap: 7px; }
+.sm-ym-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  align-items: baseline;
+}
+.sm-ym-row > dt {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-faint);
+  line-height: 1.4;
+}
+.sm-ym-v {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: var(--nums);
+  color: var(--ink);
+  text-align: right;
+  white-space: nowrap;
+}
+.sm-ym-sub {
+  grid-column: 1 / -1;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  font-size: 0.62rem;
+  line-height: 1.4;
+  font-variant-numeric: var(--nums);
+  color: var(--ink-fainter);
+}
+.sm-ym .is-up { color: var(--up); }
+.sm-ym .is-down { color: var(--down); }
+
+/* The year selector and the deck-wide src button, kept as one cluster on the
+   head's right so space-between doesn't scatter them. */
+.sm-ym-ctl { display: inline-flex; align-items: center; gap: 6px; }
+
+/* The identity rows' bold fragments — a concentration share, a range — sit a
+   shade darker than the row text so the figure reads first. */
+.sm-row > dd b { font-weight: 600; color: var(--ink); font-variant-numeric: var(--nums); }
+
+/* ---- definition rows ---------------------------------------------------- */
+
+.sm-rows { margin: 0; display: grid; gap: 7px; }
+/* The fact sheet under the business description: ONE quiet card. The tinted
+   surface and hairline are what make twelve small facts read as a unit — the
+   same facts floated loose under the quote read as clutter. Inside, label
+   above value on aligned tracks, values in full ink; a hairline splits the
+   registrant facts from the counterparty strip. */
+.sm-facts {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--radius-sm);
+}
+/* Every fact is an inline LABEL VALUE pair, and the pairs flow along wrapping
+   lines like text — no fixed tracks, so a short value ("NYSE") spends the
+   width of "NYSE", not a quarter of the card, and the whole sheet compresses
+   to two or three lines. A long value (the segment list) wraps inside its own
+   pair. The two bands keep their hairline.
+
+   Separation is UNIFORM: every pair carries a 1px divider centred in the
+   column gap (::before at minus half the gap). A pair that starts a wrapped
+   line would draw a stray divider at the card's edge — the container's
+   overflow: hidden clips exactly those, since they fall outside its box. */
+.sm-fgrid {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 26px;
+  overflow: hidden;
+}
+.sm-fgrid .sm-row {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+.sm-fgrid .sm-row::before {
+  content: '';
+  position: absolute;
+  left: -13px;
+  top: 3px;
+  bottom: 3px;
+  width: 1px;
+  background: var(--hairline-soft);
+}
+.sm-fgrid .sm-row > dt { line-height: 1.5; white-space: nowrap; }
+.sm-fgrid .sm-row > dd {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--ink);
+  min-width: 0;
+}
+.sm-fgrid-b {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hairline-soft);
+}
+.sm-row {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+}
+.sm-row > dt {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-fainter);
+  line-height: 1.5;
+}
+.sm-row > dd {
+  margin: 0;
+  min-width: 0;
+  font-size: 0.79rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+@media (max-width: 700px) {
+  .sm-row { grid-template-columns: 1fr; gap: 1px; }
+}
+
+.sm-sep { color: var(--ink-fainter); margin: 0 5px; }
+.sm-tk {
+  appearance: none;
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-family: var(--font-code);
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--hairline);
+}
+.sm-tk:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ---- prose blocks ------------------------------------------------------- */
+
+.sm-sh {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 15px 0 8px;
+  padding-top: 11px;
+  border-top: 1px solid var(--hairline-soft);
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-fainter);
+}
+.sm-sh:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.sm-sh-note {
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--ink-fainter);
+  opacity: 0.85;
+}
+
+.sm-p {
+  margin: 0 0 9px;
+  font-size: 0.79rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.sm-p:last-child { margin-bottom: 0; }
+.sm-k {
+  display: inline-block;
+  margin-right: 7px;
+  font-size: 0.57rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-fainter);
+}
+.sm-q { color: var(--ink-fainter); }
+
+.sm-cats, .sm-risks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.sm-cats li { display: flex; gap: 12px; align-items: baseline; }
+.sm-cats time {
+  flex: none;
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  font-variant-numeric: var(--nums);
+}
+.sm-cats span { min-width: 0; }
+
+.sm-risks li { padding-left: 13px; position: relative; }
+.sm-risks li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--ink-fainter);
+}
+
+/* ---- the rail's segment block -------------------------------------------- *
+ *
+ * A subsection of the company header: under the identity, above the metric
+ * deck, reusing .sm-ym-head so the two subsections read as one column. Each
+ * segment is name / revenue on the row and a share track with share and YoY
+ * on the sub line — three figures, which is what a 320px rail can state
+ * without wrapping. */
+.sm-rs { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sm-rs-period {
+  font-family: var(--font-code);
+  font-size: 0.6rem;
+  font-variant-numeric: var(--nums);
+  color: var(--ink-fainter);
+  white-space: nowrap;
+}
+.sm-rs-rows { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.sm-rs-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  row-gap: 3px;
+  align-items: baseline;
+}
+.sm-rs-row > dt {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-faint);
+  line-height: 1.4;
+  min-width: 0;
+}
+.sm-rs-v {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: var(--nums);
+  color: var(--ink);
+  text-align: right;
+  white-space: nowrap;
+}
+.sm-rs-sub {
+  grid-column: 1 / -1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.62rem;
+  line-height: 1.4;
+  font-variant-numeric: var(--nums);
+  color: var(--ink-fainter);
+  white-space: nowrap;
+}
+.sm-rs-track {
+  flex: 1 1 auto;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.sm-rs-track > span {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.75;
+}
+.sm-rs .is-up { color: var(--up); }
+.sm-rs .is-down { color: var(--down); }
+.sm-rs-more { margin: 0; font-size: 0.6rem; color: var(--ink-fainter); }
+
+/* ---- the segment split --------------------------------------------------- *
+ *
+ * One table, panel-wide. The bar column is the read-at-a-glance copy of the
+ * Share column — width proportional to the LARGEST segment, so the biggest bar
+ * always fills its track and the others read against it. Numerals right-align
+ * on tabular figures; the name column takes whatever is left. */
+.sm-seg {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  font-variant-numeric: var(--nums);
+}
+.sm-seg th {
+  padding: 0 10px 5px 0;
+  text-align: right;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-fainter);
+  border-bottom: 1px solid var(--hairline-soft);
+  white-space: nowrap;
+}
+.sm-seg td {
+  padding: 6px 10px 6px 0;
+  text-align: right;
+  color: var(--ink);
+  border-bottom: 1px solid var(--hairline-soft);
+  white-space: nowrap;
+}
+.sm-seg tr:last-child td { border-bottom: 0; }
+.sm-seg th:last-child, .sm-seg td:last-child { padding-right: 0; }
+.sm-seg .sm-seg-name {
+  text-align: left;
+  color: var(--ink-soft);
+  white-space: normal;
+  min-width: 0;
+}
+td.sm-seg-name { font-weight: 600; color: var(--ink); }
+.sm-seg .sm-seg-bar { width: 26%; min-width: 90px; }
+.sm-seg td.sm-seg-bar span {
+  display: block;
+  height: 8px;
+  min-width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.75;
+}
+.sm-seg .is-up { color: var(--up); }
+.sm-seg .is-down { color: var(--down); }
+
+/* A row with commentary behind it invites the press; one without stays inert.
+   The chevron is the whole affordance — hover only confirms it. */
+.sm-seg tr.sm-seg-row-x { cursor: pointer; }
+.sm-seg tr.sm-seg-row-x:hover td { background: var(--panel-2); }
+.sm-seg-chev {
+  display: inline-block;
+  width: 14px;
+  color: var(--ink-fainter);
+  font-size: 0.7em;
+}
+/* The opened commentary: full-width under its row, on the quiet card surface
+   the fact sheet uses, so figures stay figures and words read as words. */
+.sm-seg tr.sm-seg-xrow td {
+  padding: 0 0 10px 14px;
+  text-align: left;
+  white-space: normal;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.sm-seg-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 10px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--radius-sm);
+}
+.sm-seg-voice { min-width: 0; }
+.sm-seg-voice .sm-k { display: block; margin-bottom: 2px; }
+.sm-seg-q {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  border-left: 2px solid var(--hairline);
+  padding-left: 9px;
+}
+.sm-seg-p { margin: 0 0 3px; font-size: 0.78rem; line-height: 1.6; color: var(--ink-soft); }
+.sm-seg-cite { margin: 0; font-size: 0.64rem; line-height: 1.5; color: var(--ink-fainter); }
+.sm-seg-cite a { color: inherit; text-decoration: underline; }
+.sm-seg-cite a:hover { color: var(--accent); }
+
+/* ---- the sidebar source inspector --------------------------------------- */
+
+/* The inspector itself is the shell's (.si-*, base.css). What stays here is
+   this surface's placement of the src affordance: on a <dt> or a heading, the
+   button needs the same 6px offset the old .sm-srcbtn carried. */
+.sm-surface .si-srcbtn { margin-left: 6px; vertical-align: 1px; }
+
+.sm-foot {
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline-soft);
+  font-size: 0.66rem;
+  line-height: 1.6;
+  color: var(--ink-fainter);
+}
+
+/* Below 1000px the shell stacks the whole app into a column. A rail still
+   capped at a viewport height becomes a short scrolling box above the content
+   instead of part of the page — the bug .vl-railcol had. */
+@media (max-width: 1000px) {
+  .sm-surface { flex-direction: column; height: auto; overflow: visible; }
+  .sm-railcol {
+    flex: 0 0 auto; width: 100%; align-self: stretch;
+    position: static; max-height: none; overflow: visible;
+  }
+}
+
+/* ---- the stock, as traded ------------------------------------------------ */
+.sm-stk-range {
+  display: flex; align-items: center; gap: 12px;
+  margin: 4px 0 14px; padding-top: 14px;
+}
+.sm-stk-lo, .sm-stk-hi {
+  flex: 0 0 auto; font-weight: 600; font-variant-numeric: tabular-nums;
+}
+.sm-stk-lo i, .sm-stk-hi i {
+  display: block; font-style: normal; font-size: 10px; color: var(--ink-fainter);
+}
+.sm-stk-hi { text-align: right; }
+.sm-stk-bar { position: relative; flex: 1 1 auto; height: 6px; }
+.sm-stk-track {
+  position: absolute; inset: 0; border-radius: 999px;
+  background: linear-gradient(90deg, var(--hairline), var(--ink-fainter));
+  opacity: .55;
+}
+.sm-stk-mark {
+  position: absolute; top: 50%; width: 2px; height: 14px;
+  transform: translate(-50%, -50%); background: var(--accent);
+}
+.sm-stk-mark b {
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  margin-bottom: 3px; font-size: 11px; white-space: nowrap;
+  font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.sm-stk-tiles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.sm-stk-tile {
+  flex: 1 1 96px; min-width: 96px; padding: 6px 9px 5px;
+  background: var(--panel-2); border-top: 2px solid var(--accent);
+}
+.sm-stk-tile i {
+  display: block; font-style: normal; font-size: 10px; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+.sm-stk-tile b { font-size: 15px; font-variant-numeric: tabular-nums; }
+.sm-stk-tile .is-up { color: var(--up); }
+.sm-stk-tile .is-down { color: var(--down); }
+.sm-stk-cap { margin-top: 2px; }
+
+/* ---- revenue by geography ------------------------------------------------ */
+.sm-geo { width: 100%; border-collapse: collapse; font-size: 13px; }
+.sm-geo th {
+  text-align: right; font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--ink-soft); font-weight: 600; padding: 2px 8px 4px;
+  border-bottom: 1px solid var(--hairline);
+}
+.sm-geo th:first-child { text-align: left; }
+.sm-geo td { padding: 4px 8px; border-bottom: 1px solid var(--hairline); }
+.sm-geo td:first-child { text-align: left; }
+.sm-geo-n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sm-geo .is-up { color: var(--up); }
+.sm-geo .is-down { color: var(--down); }
+.sm-geo-barcell { width: 26%; }
+.sm-geo-bar {
+  display: block; height: 8px; background: var(--accent); opacity: .75; border-radius: 2px;
+}
+.sm-geo-und td { color: var(--ink-soft); }
+.sm-geo-und td:first-child { font-style: italic; }
+
+/* ---- competitor sector tags and segment trajectory ----------------------- */
+.sm-nm { white-space: nowrap; }
+.sm-nm-sec { font-size: 11px; color: var(--ink-soft); }
+.sm-seg-nums { margin: 0 0 8px; font-size: 12.5px; line-height: 1.6; }
+.sm-seg-nums .sm-k { margin-right: 3px; }
+.sm-seg-nd { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+/* ---- the candlestick chart in "the stock, as traded" ---- */
+.sm-surface .sm-candles { margin: 0 0 10px; }
+.sm-surface .sm-candles svg { width: 100%; height: auto; display: block; }
+.sm-surface .sm-cd-grid { stroke: var(--hairline); stroke-width: .5; }
+.sm-surface .sm-cd-tick { font-size: 8px; fill: var(--ink-fainter); font-family: inherit; }
+.sm-surface .sm-cd-up line { stroke: var(--up); stroke-width: 1; }
+.sm-surface .sm-cd-up rect { fill: var(--up); }
+.sm-surface .sm-cd-down line { stroke: var(--down); stroke-width: 1; }
+.sm-surface .sm-cd-down rect { fill: var(--down); }
+.sm-surface .sm-cd-tickmark { stroke: var(--ink-soft); stroke-width: 1.2; }
+
+/* ---- candle chart horizon controls ---- */
+.sm-surface .sm-cd-controls { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 0 0 6px; }
+.sm-surface .sm-cd-chip {
+  background: none; color: var(--ink-fainter); border: 1px solid var(--hairline);
+  border-radius: 999px; padding: 1px 8px; font: inherit; font-size: 10.5px; cursor: pointer;
+}
+.sm-surface .sm-cd-chip:hover { border-color: var(--accent); }
+.sm-surface .sm-cd-chip.is-on { color: var(--ink); border-color: var(--ink-soft); font-weight: 600; }
+.sm-surface .sm-cd-entry {
+  background: var(--panel-2); color: var(--ink); border: 1px solid var(--hairline);
+  border-radius: 999px; padding: 1px 9px; font: inherit; font-size: 10.5px; width: 90px;
+}
+.sm-surface .sm-cd-entry.is-bad { border-color: var(--down); }
+
+/* ---- the auto-research status chip ---- */
+.sm-surface .sm-research {
+  margin: 0 0 8px; padding: 6px 9px; font-size: 11.5px; line-height: 1.5;
+  color: var(--ink-soft); background: var(--panel-2);
+  border: 1px solid var(--hairline); border-left: 3px solid var(--accent); border-radius: 3px;
+}
+.sm-surface .sm-research.is-bad { border-left-color: var(--down); }

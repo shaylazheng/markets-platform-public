@@ -1,0 +1,15 @@
+{
+  "name": "@markets/news",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Public RSS feeds \u2014 wire, finance press, newswire releases and SEC 8-Ks \u2014 deduped, keyword-themed, and matched to the book.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@markets/core": "*",
+    "@markets/shell": "*"
+  }
+}
